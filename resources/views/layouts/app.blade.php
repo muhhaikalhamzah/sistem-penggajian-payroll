@@ -326,6 +326,22 @@
                         <span>Struktur Gaji</span>
                     </a>
                 </li>
+                
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('allowance.*') ? '' : 'collapsed' }}"
+                        href="{{ route('allowance.index') }}">
+                        <i class='bx bx-plus-circle'></i>
+                        <span>Tunjangan</span>
+                    </a>
+                </li>
+                
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('deduction.*') ? '' : 'collapsed' }}"
+                        href="{{ route('deduction.index') }}">
+                        <i class='bx bx-minus-circle'></i>
+                        <span>Potongan</span>
+                    </a>
+                </li>
             @endif
 
 

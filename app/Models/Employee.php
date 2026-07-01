@@ -34,4 +34,14 @@ class Employee extends Model
     {
         return $this->hasMany(SalaryStructure::class);
     }
+
+    public function allowances()
+    {
+        return $this->hasMany(Allowance::class);
+    }
+
+    public function deductions()
+    {
+        return $this->hasMany(Deduction::class);
+    }
 }

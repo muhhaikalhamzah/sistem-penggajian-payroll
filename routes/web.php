@@ -34,6 +34,8 @@ Route::middleware('auth')->group(function () {
 
     Route::middleware('role:finance')->group(function () {
         Route::resource('/salary-structure', App\Http\Controllers\SalaryStructureController::class);
+        Route::resource('/allowance', App\Http\Controllers\AllowanceController::class);
+        Route::resource('/deduction', App\Http\Controllers\DeductionController::class);
     });
 
     Route::get('/setting', [SettingController::class, 'index'])->name('setting.index');
