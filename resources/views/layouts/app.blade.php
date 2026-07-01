@@ -288,6 +288,32 @@
                         <span>User</span>
                     </a>
                 </li>
+                
+                <li class="nav-heading">Master Data</li>
+                
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('department.*') ? '' : 'collapsed' }}"
+                        href="{{ route('department.index') }}">
+                        <i class='bx bx-buildings'></i>
+                        <span>Departemen</span>
+                    </a>
+                </li>
+                
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('position.*') ? '' : 'collapsed' }}"
+                        href="{{ route('position.index') }}">
+                        <i class='bx bx-briefcase'></i>
+                        <span>Jabatan</span>
+                    </a>
+                </li>
+                
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('employee.*') ? '' : 'collapsed' }}"
+                        href="{{ route('employee.index') }}">
+                        <i class='bx bx-group'></i>
+                        <span>Karyawan</span>
+                    </a>
+                </li>
             @endif
 
 
