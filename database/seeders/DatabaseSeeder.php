@@ -26,6 +26,7 @@ class DatabaseSeeder extends Seeder
             DeductionSeeder::class,
             AttendanceRecordSeeder::class,
             LeaveRequestSeeder::class,
+            TaxRecordSeeder::class,
         ]);
     }
 }

@@ -54,4 +54,9 @@ class Employee extends Model
     {
         return $this->hasMany(LeaveRequest::class);
     }
+
+    public function taxRecords()
+    {
+        return $this->hasMany(TaxRecord::class);
+    }
 }
