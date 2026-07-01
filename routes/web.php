@@ -30,12 +30,16 @@ Route::middleware('auth')->group(function () {
         Route::resource('/department', App\Http\Controllers\DepartmentController::class);
         Route::resource('/position', App\Http\Controllers\PositionController::class);
         Route::resource('/employee', App\Http\Controllers\EmployeeController::class);
-        Route::resource('/attendance', App\Http\Controllers\AttendanceRecordController::class);
-    });
+    // Rekap Absensi & Cuti
+    Route::resource('attendance', App\Http\Controllers\AttendanceRecordController::class);
+    Route::resource('leave-requests', App\Http\Controllers\LeaveRequestController::class)->only(['index', 'update', 'show']);
+});
 
-    Route::middleware('role:employee')->group(function () {
-        Route::get('/my-attendance', [App\Http\Controllers\MyAttendanceController::class, 'index'])->name('my-attendance.index');
-    });
+// Employee Routes
+Route::middleware(['auth', 'role:employee'])->group(function () {
+    Route::get('/my-attendance', [App\Http\Controllers\MyAttendanceController::class, 'index'])->name('my-attendance.index');
+    Route::resource('my-leaves', App\Http\Controllers\MyLeaveController::class)->only(['index', 'create', 'store', 'show']);
+});
 
     Route::middleware('role:finance')->group(function () {
         Route::resource('/salary-structure', App\Http\Controllers\SalaryStructureController::class);

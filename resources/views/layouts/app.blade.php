@@ -292,46 +292,42 @@
                 <li class="nav-heading">Master Data</li>
                 
                 <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('department.*') ? '' : 'collapsed' }}"
-                        href="{{ route('department.index') }}">
-                        <i class='bx bx-buildings'></i>
-                        <span>Departemen</span>
+                    <a href="{{ route('department.index') }}" class="nav-link">
+                        <i class="bx bx-buildings"></i> Departemen
                     </a>
                 </li>
-                
                 <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('position.*') ? '' : 'collapsed' }}"
-                        href="{{ route('position.index') }}">
-                        <i class='bx bx-briefcase'></i>
-                        <span>Jabatan</span>
+                    <a href="{{ route('position.index') }}" class="nav-link">
+                        <i class="bx bx-briefcase"></i> Jabatan
                     </a>
                 </li>
-                
                 <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('employee.*') ? '' : 'collapsed' }}"
-                        href="{{ route('employee.index') }}">
-                        <i class='bx bx-user'></i>
-                        <span>Pegawai</span>
+                    <a href="{{ route('employee.index') }}" class="nav-link">
+                        <i class="bx bx-user-circle"></i> Pegawai
                     </a>
                 </li>
-                
                 <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('attendance.*') ? '' : 'collapsed' }}"
-                        href="{{ route('attendance.index') }}">
-                        <i class='bx bx-calendar-check'></i>
-                        <span>Rekap Absensi</span>
+                    <a href="{{ route('attendance.index') }}" class="nav-link">
+                        <i class="bx bx-check-square"></i> Rekap Absensi
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('leave-requests.index') }}" class="nav-link">
+                        <i class="bx bx-calendar-event"></i> Pengajuan Cuti
                     </a>
                 </li>
             @endif
 
-            @if (Auth::user()->role === 'employee')
-                <li class="nav-heading">Layanan Pegawai</li>
-                
+            @if (auth()->user()->role == 'employee')
+                <li class="nav-title mt-3">Layanan Pegawai</li>
                 <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('my-attendance.*') ? '' : 'collapsed' }}"
-                        href="{{ route('my-attendance.index') }}">
-                        <i class='bx bx-calendar-check'></i>
-                        <span>Absensi Saya</span>
+                    <a href="{{ route('my-attendance.index') }}" class="nav-link">
+                        <i class="bx bx-check-shield"></i> Absensi Saya
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('my-leaves.index') }}" class="nav-link">
+                        <i class="bx bx-calendar"></i> Cuti Saya
                     </a>
                 </li>
             @endif
