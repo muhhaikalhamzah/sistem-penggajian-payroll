@@ -30,6 +30,11 @@ Route::middleware('auth')->group(function () {
         Route::resource('/department', App\Http\Controllers\DepartmentController::class);
         Route::resource('/position', App\Http\Controllers\PositionController::class);
         Route::resource('/employee', App\Http\Controllers\EmployeeController::class);
+        Route::resource('/attendance', App\Http\Controllers\AttendanceRecordController::class);
+    });
+
+    Route::middleware('role:employee')->group(function () {
+        Route::get('/my-attendance', [App\Http\Controllers\MyAttendanceController::class, 'index'])->name('my-attendance.index');
     });
 
     Route::middleware('role:finance')->group(function () {

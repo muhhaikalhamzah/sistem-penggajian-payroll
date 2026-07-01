@@ -24,6 +24,7 @@ class DatabaseSeeder extends Seeder
             SalaryStructureSeeder::class,
             AllowanceSeeder::class,
             DeductionSeeder::class,
+            AttendanceRecordSeeder::class,
         ]);
     }
 }

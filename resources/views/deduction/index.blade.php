@@ -31,6 +31,7 @@
                             </td>
                             <td>Rp {{ number_format($deduction->amount, 0, ',', '.') }}</td>
                             <td>
+                                <div class="d-flex gap-1 justify-content-center">
                                 <a href="{{ route('deduction.show', $deduction) }}" class="btn btn-info btn-sm">
                                     <i class='bx bx-info-circle'></i>
                                 </a>
@@ -41,6 +42,7 @@
                                     data-bs-target="#deleteModal" data-route="{{ route('deduction.destroy', $deduction) }}">
                                     <i class='bx bx-trash'></i>
                                 </button>
+                                </div>
                             </td>
                         </tr>
                     @endforeach

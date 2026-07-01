@@ -23,6 +23,10 @@
                             <td>Rp {{ number_format($position->min_salary, 0, ',', '.') }}</td>
                             <td>Rp {{ number_format($position->max_salary, 0, ',', '.') }}</td>
                             <td>
+                                <div class="d-flex gap-1 justify-content-center">
+                                <a href="{{ route('position.show', $position) }}" class="btn btn-info btn-sm">
+                                    <i class='bx bx-info-circle'></i>
+                                </a>
                                 <a href="{{ route('position.edit', $position) }}" class="btn btn-warning btn-sm">
                                     <i class='bx bx-edit-alt'></i>
                                 </a>
@@ -30,6 +34,7 @@
                                     data-bs-target="#deleteModal" data-route="{{ route('position.destroy', $position) }}">
                                     <i class='bx bx-trash'></i>
                                 </button>
+                                </div>
                             </td>
                         </tr>
                     @endforeach

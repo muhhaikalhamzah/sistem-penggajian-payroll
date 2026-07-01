@@ -310,8 +310,28 @@
                 <li class="nav-item">
                     <a class="nav-link {{ request()->routeIs('employee.*') ? '' : 'collapsed' }}"
                         href="{{ route('employee.index') }}">
-                        <i class='bx bx-group'></i>
-                        <span>Karyawan</span>
+                        <i class='bx bx-user'></i>
+                        <span>Pegawai</span>
+                    </a>
+                </li>
+                
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('attendance.*') ? '' : 'collapsed' }}"
+                        href="{{ route('attendance.index') }}">
+                        <i class='bx bx-calendar-check'></i>
+                        <span>Rekap Absensi</span>
+                    </a>
+                </li>
+            @endif
+
+            @if (Auth::user()->role === 'employee')
+                <li class="nav-heading">Layanan Pegawai</li>
+                
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('my-attendance.*') ? '' : 'collapsed' }}"
+                        href="{{ route('my-attendance.index') }}">
+                        <i class='bx bx-calendar-check'></i>
+                        <span>Absensi Saya</span>
                     </a>
                 </li>
             @endif

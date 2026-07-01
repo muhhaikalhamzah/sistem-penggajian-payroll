@@ -25,6 +25,10 @@
                             <td>{{ $employee->position->title }}</td>
                             <td>{{ $employee->ptkp_status }}</td>
                             <td>
+                                <div class="d-flex gap-1 justify-content-center">
+                                <a href="{{ route('employee.show', $employee) }}" class="btn btn-info btn-sm">
+                                    <i class='bx bx-info-circle'></i>
+                                </a>
                                 <a href="{{ route('employee.edit', $employee) }}" class="btn btn-warning btn-sm">
                                     <i class='bx bx-edit-alt'></i>
                                 </a>
@@ -32,6 +36,7 @@
                                     data-bs-target="#deleteModal" data-route="{{ route('employee.destroy', $employee) }}">
                                     <i class='bx bx-trash'></i>
                                 </button>
+                                </div>
                             </td>
                         </tr>
                     @endforeach

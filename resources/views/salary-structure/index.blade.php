@@ -23,6 +23,7 @@
                             <td>Rp {{ number_format($salary->basic_salary, 0, ',', '.') }}</td>
                             <td>{{ $salary->effective_date->format('d M Y') }}</td>
                             <td>
+                                <div class="d-flex gap-1 justify-content-center">
                                 <a href="{{ route('salary-structure.show', $salary) }}" class="btn btn-info btn-sm">
                                     <i class='bx bx-info-circle'></i>
                                 </a>
@@ -33,6 +34,7 @@
                                     data-bs-target="#deleteModal" data-route="{{ route('salary-structure.destroy', $salary) }}">
                                     <i class='bx bx-trash'></i>
                                 </button>
+                                </div>
                             </td>
                         </tr>
                     @endforeach

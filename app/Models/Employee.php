@@ -44,4 +44,9 @@ class Employee extends Model
     {
         return $this->hasMany(Deduction::class);
     }
+
+    public function attendanceRecords()
+    {
+        return $this->hasMany(AttendanceRecord::class);
+    }
 }

@@ -21,6 +21,10 @@
                             <td>{{ $department->name }}</td>
                             <td>{{ $department->description }}</td>
                             <td>
+                                <div class="d-flex gap-1 justify-content-center">
+                                <a href="{{ route('department.show', $department) }}" class="btn btn-info btn-sm">
+                                    <i class='bx bx-info-circle'></i>
+                                </a>
                                 <a href="{{ route('department.edit', $department) }}" class="btn btn-warning btn-sm">
                                     <i class='bx bx-edit-alt'></i>
                                 </a>
@@ -28,6 +32,7 @@
                                     data-bs-target="#deleteModal" data-route="{{ route('department.destroy', $department) }}">
                                     <i class='bx bx-trash'></i>
                                 </button>
+                                </div>
                             </td>
                         </tr>
                     @endforeach
