@@ -316,6 +316,18 @@
                 </li>
             @endif
 
+            @if (Auth::user()->role === 'finance')
+                <li class="nav-heading">Penggajian</li>
+                
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('salary-structure.*') ? '' : 'collapsed' }}"
+                        href="{{ route('salary-structure.index') }}">
+                        <i class='bx bx-money'></i>
+                        <span>Struktur Gaji</span>
+                    </a>
+                </li>
+            @endif
+
 
         </ul>
 

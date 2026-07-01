@@ -32,6 +32,10 @@ Route::middleware('auth')->group(function () {
         Route::resource('/employee', App\Http\Controllers\EmployeeController::class);
     });
 
+    Route::middleware('role:finance')->group(function () {
+        Route::resource('/salary-structure', App\Http\Controllers\SalaryStructureController::class);
+    });
+
     Route::get('/setting', [SettingController::class, 'index'])->name('setting.index');
     Route::put('/setting/{setting}/update', [SettingController::class, 'update'])->name('setting.update');
 });
