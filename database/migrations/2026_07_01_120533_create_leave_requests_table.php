@@ -16,8 +16,8 @@ return new class extends Migration
             $table->foreignId('employee_id')->constrained()->cascadeOnDelete();
             $table->date('start_date');
             $table->date('end_date');
-            $table->enum('leave_type', ['Annual', 'Sick', 'Unpaid']);
-            $table->enum('status', ['Pending', 'Approved', 'Rejected'])->default('Pending');
+            $table->enum('leave_type', ['Tahunan', 'Sakit', 'Lainnya']);
+            $table->enum('status', ['Menunggu', 'Disetujui', 'Ditolak'])->default('Menunggu');
             $table->timestamps();
         });
     }

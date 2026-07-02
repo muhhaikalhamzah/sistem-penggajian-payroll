@@ -18,7 +18,7 @@ class DeductionSeeder extends Seeder
                 'employee_id' => $employee->id,
                 'name' => 'Potongan BPJS Kesehatan',
                 'amount' => 150000,
-                'type' => 'Fixed',
+                'type' => 'Tetap',
             ]);
         }
         

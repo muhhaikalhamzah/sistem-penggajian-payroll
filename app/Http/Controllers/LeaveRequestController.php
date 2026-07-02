@@ -30,7 +30,7 @@ class LeaveRequestController extends Controller
     public function update(Request $request, LeaveRequest $leaveRequest)
     {
         $validated = $request->validate([
-            'status' => 'required|in:Approved,Rejected',
+            'status' => 'required|in:Disetujui,Ditolak',
         ]);
 
         $leaveRequest->update(['status' => $validated['status']]);

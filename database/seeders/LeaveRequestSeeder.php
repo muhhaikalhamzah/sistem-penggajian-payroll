@@ -18,16 +18,16 @@ class LeaveRequestSeeder extends Seeder
                 'employee_id' => $employee->id,
                 'start_date' => '2023-11-01',
                 'end_date' => '2023-11-03',
-                'leave_type' => 'Annual',
-                'status' => 'Pending',
+                'leave_type' => 'Tahunan',
+                'status' => 'Menunggu',
             ]);
             
             \App\Models\LeaveRequest::create([
                 'employee_id' => $employee->id,
                 'start_date' => '2023-10-15',
                 'end_date' => '2023-10-15',
-                'leave_type' => 'Sick',
-                'status' => 'Approved',
+                'leave_type' => 'Sakit',
+                'status' => 'Disetujui',
             ]);
         }
         

@@ -24,8 +24,8 @@ class LeaveRequestFactory extends Factory
             'employee_id' => \App\Models\Employee::factory(),
             'start_date' => $start->format('Y-m-d'),
             'end_date' => $end->format('Y-m-d'),
-            'leave_type' => fake()->randomElement(['Annual', 'Sick', 'Unpaid']),
-            'status' => fake()->randomElement(['Pending', 'Approved', 'Rejected']),
+            'leave_type' => fake()->randomElement(['Tahunan', 'Sakit', 'Lainnya']),
+            'status' => fake()->randomElement(['Menunggu', 'Disetujui', 'Ditolak']),
         ];
     }
 }

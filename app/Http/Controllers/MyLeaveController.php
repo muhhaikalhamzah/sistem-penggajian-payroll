@@ -39,12 +39,12 @@ class MyLeaveController extends Controller
         $validated = $request->validate([
             'start_date' => 'required|date',
             'end_date' => 'required|date|after_or_equal:start_date',
-            'leave_type' => 'required|in:Annual,Sick,Unpaid',
+            'leave_type' => 'required|in:Tahunan,Sakit,Lainnya',
         ]);
 
-        // Validation for overlapping leaves (only check Pending and Approved)
+        // Validation for overlapping leaves (only check Menunggu and Disetujui)
         $overlap = LeaveRequest::where('employee_id', $user->employee->id)
-            ->whereIn('status', ['Pending', 'Approved'])
+            ->whereIn('status', ['Menunggu', 'Disetujui'])
             ->where(function ($q) use ($validated) {
                 $q->whereBetween('start_date', [$validated['start_date'], $validated['end_date']])
                   ->orWhereBetween('end_date', [$validated['start_date'], $validated['end_date']])
@@ -56,7 +56,7 @@ class MyLeaveController extends Controller
             ->exists();
 
         if ($overlap) {
-            return back()->with('error', 'Tanggal yang Anda ajukan beririsan (overlap) dengan pengajuan cuti Anda yang lain (Pending/Approved).')->withInput();
+            return back()->with('error', 'Tanggal yang Anda ajukan beririsan (overlap) dengan pengajuan cuti Anda yang lain (Menunggu/Disetujui).')->withInput();
         }
 
         LeaveRequest::create([
@@ -64,7 +64,7 @@ class MyLeaveController extends Controller
             'start_date' => $validated['start_date'],
             'end_date' => $validated['end_date'],
             'leave_type' => $validated['leave_type'],
-            'status' => 'Pending',
+            'status' => 'Menunggu',
         ]);
 
         return redirect()->route('my-leaves.index')->with('success', 'Pengajuan cuti berhasil dibuat.');

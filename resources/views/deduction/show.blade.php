@@ -21,10 +21,10 @@
             <tr>
                 <th>Tipe</th>
                 <td>
-                    @if($deduction->type === 'Fixed')
-                        <span class="badge bg-primary">Fixed</span>
+                    @if($deduction->type === 'Tetap')
+                        <span class="badge bg-primary">Tetap</span>
                     @else
-                        <span class="badge bg-success">Variable</span>
+                        <span class="badge bg-success">Variabel</span>
                     @endif
                 </td>
             </tr>

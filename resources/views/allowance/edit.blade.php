@@ -24,8 +24,8 @@
                 <label for="type" class="form-label required">Tipe</label>
                 <select class="form-select @error('type') is-invalid @enderror" id="type" name="type" required>
                     <option value="">Pilih Tipe</option>
-                    <option value="Fixed" @selected(old('type', $allowance->type) == 'Fixed')>Fixed (Tetap bulanan)</option>
-                    <option value="Variable" @selected(old('type', $allowance->type) == 'Variable')>Variable (Berdasarkan hari masuk, dll)</option>
+                    <option value="Tetap" @selected(old('type', $allowance->type) == 'Tetap')>Tetap (Fixed)</option>
+                    <option value="Variabel" @selected(old('type', $allowance->type) == 'Variabel')>Variabel (Variable)</option>
                 </select>
                 @error('type') <div class="invalid-feedback">{{ $message }}</div> @enderror
             </div>

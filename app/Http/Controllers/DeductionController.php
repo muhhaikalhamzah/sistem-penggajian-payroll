@@ -31,7 +31,7 @@ class DeductionController extends Controller
             'employee_id' => 'required|exists:employees,id',
             'name' => 'required|string|max:255',
             'amount' => 'required|numeric|min:0',
-            'type' => 'required|in:Fixed,Variable',
+            'type' => 'required|in:Tetap,Variabel',
         ]);
 
         DB::beginTransaction();
@@ -68,7 +68,7 @@ class DeductionController extends Controller
             'employee_id' => 'required|exists:employees,id',
             'name' => 'required|string|max:255',
             'amount' => 'required|numeric|min:0',
-            'type' => 'required|in:Fixed,Variable',
+            'type' => 'required|in:Tetap,Variabel',
         ]);
 
         DB::beginTransaction();

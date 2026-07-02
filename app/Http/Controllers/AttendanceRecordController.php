@@ -33,7 +33,7 @@ class AttendanceRecordController extends Controller
             'record_date' => 'required|date',
             'check_in' => 'nullable|date_format:H:i',
             'check_out' => 'nullable|date_format:H:i',
-            'status' => 'required|in:Present,Absent,Leave',
+            'status' => 'required|in:Hadir,Alpa,Cuti',
         ]);
 
         $overtimeHours = 0;
@@ -87,7 +87,7 @@ class AttendanceRecordController extends Controller
             'record_date' => 'required|date',
             'check_in' => 'nullable|date_format:H:i',
             'check_out' => 'nullable|date_format:H:i',
-            'status' => 'required|in:Present,Absent,Leave',
+            'status' => 'required|in:Hadir,Alpa,Cuti',
         ]);
 
         $overtimeHours = 0;

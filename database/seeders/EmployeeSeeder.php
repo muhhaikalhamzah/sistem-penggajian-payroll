@@ -12,8 +12,8 @@ class EmployeeSeeder extends Seeder
 {
     public function run(): void
     {
-        $dept = Department::where('name', 'IT')->first();
-        $pos = Position::where('title', 'Staff')->first();
+        $dept = Department::where('name', 'TI')->first();
+        $pos = Position::where('title', 'Staf')->first();
         $user = User::where('role', 'employee')->first(); // User dummy dari UserSeeder
 
         if ($dept && $pos) {

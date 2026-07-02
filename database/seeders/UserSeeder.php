@@ -20,17 +20,17 @@ class UserSeeder extends Seeder
                 'role' => 'Superadmin',
             ],
             [
-                'name' => 'HR Staff',
+                'name' => 'Staf HR',
                 'email' => 'hr@example.com',
                 'role' => 'hr',
             ],
             [
-                'name' => 'Finance Staff',
+                'name' => 'Staf Keuangan',
                 'email' => 'finance@example.com',
                 'role' => 'finance',
             ],
             [
-                'name' => 'Employee',
+                'name' => 'Karyawan',
                 'email' => 'employee@example.com',
                 'role' => 'employee',
             ],

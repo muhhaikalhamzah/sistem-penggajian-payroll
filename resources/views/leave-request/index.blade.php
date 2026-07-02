@@ -26,12 +26,12 @@
                             <td>{{ $leave->start_date->format('d M Y') }}</td>
                             <td>{{ $leave->end_date->format('d M Y') }}</td>
                             <td>
-                                @if($leave->status == 'Pending')
-                                    <span class="badge bg-warning text-dark">Pending</span>
-                                @elseif($leave->status == 'Approved')
-                                    <span class="badge bg-success">Approved</span>
+                                @if($leave->status == 'Menunggu')
+                                    <span class="badge bg-warning text-dark">Menunggu</span>
+                                @elseif($leave->status == 'Disetujui')
+                                    <span class="badge bg-success">Disetujui</span>
                                 @else
-                                    <span class="badge bg-danger">Rejected</span>
+                                    <span class="badge bg-danger">Ditolak</span>
                                 @endif
                             </td>
                             <td>
@@ -39,11 +39,11 @@
                                     <a href="{{ route('leave-requests.show', $leave) }}" class="btn btn-info btn-sm">
                                         <i class='bx bx-info-circle'></i>
                                     </a>
-                                    @if($leave->status == 'Pending')
+                                    @if($leave->status == 'Menunggu')
                                         <form action="{{ route('leave-requests.update', $leave) }}" method="POST" class="d-inline">
                                             @csrf
                                             @method('PUT')
-                                            <input type="hidden" name="status" value="Approved">
+                                            <input type="hidden" name="status" value="Disetujui">
                                             <button type="submit" class="btn btn-success btn-sm" title="Approve">
                                                 <i class='bx bx-check'></i>
                                             </button>
@@ -51,7 +51,7 @@
                                         <form action="{{ route('leave-requests.update', $leave) }}" method="POST" class="d-inline">
                                             @csrf
                                             @method('PUT')
-                                            <input type="hidden" name="status" value="Rejected">
+                                            <input type="hidden" name="status" value="Ditolak">
                                             <button type="submit" class="btn btn-danger btn-sm" title="Reject">
                                                 <i class='bx bx-x'></i>
                                             </button>

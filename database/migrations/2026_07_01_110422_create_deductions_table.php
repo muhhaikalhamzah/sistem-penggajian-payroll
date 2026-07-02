@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('employee_id')->constrained()->cascadeOnDelete();
             $table->string('name');
             $table->decimal('amount', 15, 2);
-            $table->enum('type', ['Fixed', 'Variable']);
+            $table->enum('type', ['Tetap', 'Variabel']);
             $table->timestamps();
         });
     }

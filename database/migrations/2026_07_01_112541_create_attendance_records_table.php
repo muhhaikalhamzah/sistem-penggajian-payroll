@@ -18,7 +18,7 @@ return new class extends Migration
             $table->time('check_in')->nullable();
             $table->time('check_out')->nullable();
             $table->integer('overtime_hours')->default(0);
-            $table->enum('status', ['Present', 'Absent', 'Leave']);
+            $table->enum('status', ['Hadir', 'Alpa', 'Cuti']);
             
             $table->unique(['employee_id', 'record_date']);
             

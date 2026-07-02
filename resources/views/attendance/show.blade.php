@@ -39,9 +39,9 @@
             <tr>
                 <th>Status Kehadiran</th>
                 <td>
-                    @if($attendance->status === 'Present')
+                    @if($attendance->status === 'Hadir')
                         <span class="badge bg-success">Hadir</span>
-                    @elseif($attendance->status === 'Absent')
+                    @elseif($attendance->status === 'Alpa')
                         <span class="badge bg-danger">Alpa</span>
                     @else
                         <span class="badge bg-secondary">Cuti/Izin</span>

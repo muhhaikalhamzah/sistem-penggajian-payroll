@@ -70,6 +70,6 @@ class LoginController extends Controller
 
         Auth::loginUsingId($request->user_id);
 
-        return redirect()->back()->withSuccess('User berhasil diganti');
+        return redirect()->route('dashboard.index')->withSuccess('User berhasil diganti');
     }
 }

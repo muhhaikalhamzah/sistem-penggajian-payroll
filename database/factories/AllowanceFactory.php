@@ -21,7 +21,7 @@ class AllowanceFactory extends Factory
             'employee_id' => \App\Models\Employee::factory(),
             'name' => fake()->randomElement(['Tunjangan Makan', 'Tunjangan Transport', 'Tunjangan Jabatan']),
             'amount' => fake()->numberBetween(50000, 1000000),
-            'type' => fake()->randomElement(['Fixed', 'Variable']),
+            'type' => fake()->randomElement(['Tetap', 'Variabel']),
         ];
     }
 }

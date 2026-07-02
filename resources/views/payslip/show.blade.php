@@ -1,8 +1,5 @@
-@extends('layouts.app')
-
-@section('title', 'Payslip Details')
-
-@section('content')
+<x-app>
+    <x-slot:title>Detail Slip Gaji</x-slot:title>
 <div class="pagetitle">
     <h1>Payslip Details</h1>
     <nav>
@@ -77,4 +74,4 @@
         </div>
     </div>
 </section>
-@endsection
+</x-app>

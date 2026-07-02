@@ -18,14 +18,14 @@ class AllowanceSeeder extends Seeder
                 'employee_id' => $employee->id,
                 'name' => 'Tunjangan Transport',
                 'amount' => 500000,
-                'type' => 'Fixed',
+                'type' => 'Tetap',
             ]);
             
             \App\Models\Allowance::create([
                 'employee_id' => $employee->id,
                 'name' => 'Tunjangan Makan',
                 'amount' => 40000,
-                'type' => 'Variable',
+                'type' => 'Variabel',
             ]);
         }
         

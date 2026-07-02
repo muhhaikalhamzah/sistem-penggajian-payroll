@@ -26,7 +26,7 @@ class AttendanceRecordSeeder extends Seeder
                     'check_in' => '08:00',
                     'check_out' => '17:00',
                     'overtime_hours' => 0,
-                    'status' => 'Present',
+                    'status' => 'Hadir',
                 ]);
             }
         }
@@ -45,7 +45,7 @@ class AttendanceRecordSeeder extends Seeder
                     'check_in' => '08:00',
                     'check_out' => '17:00',
                     'overtime_hours' => 0,
-                    'status' => 'Present',
+                    'status' => 'Hadir',
                 ]);
             }
         }

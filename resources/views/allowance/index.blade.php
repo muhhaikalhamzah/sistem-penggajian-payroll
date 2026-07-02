@@ -23,10 +23,10 @@
                             <td>{{ $allowance->employee->first_name }} {{ $allowance->employee->last_name }} ({{ $allowance->employee->employee_number }})</td>
                             <td>{{ $allowance->name }}</td>
                             <td>
-                                @if($allowance->type === 'Fixed')
-                                    <span class="badge bg-primary">Fixed</span>
+                                @if($allowance->type === 'Tetap')
+                                    <span class="badge bg-primary">Tetap</span>
                                 @else
-                                    <span class="badge bg-success">Variable</span>
+                                    <span class="badge bg-success">Variabel</span>
                                 @endif
                             </td>
                             <td>Rp {{ number_format($allowance->amount, 0, ',', '.') }}</td>

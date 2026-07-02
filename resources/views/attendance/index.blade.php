@@ -34,9 +34,9 @@
                                 @endif
                             </td>
                             <td>
-                                @if($att->status === 'Present')
+                                @if($att->status === 'Hadir')
                                     <span class="badge bg-success">Hadir</span>
-                                @elseif($att->status === 'Absent')
+                                @elseif($att->status === 'Alpa')
                                     <span class="badge bg-danger">Alpa</span>
                                 @else
                                     <span class="badge bg-secondary">Cuti/Izin</span>

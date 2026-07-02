@@ -40,9 +40,9 @@
             <div class="mb-3">
                 <label for="status" class="form-label required">Status Kehadiran</label>
                 <select class="form-select @error('status') is-invalid @enderror" id="status" name="status" required>
-                    <option value="Present" @selected(old('status') == 'Present')>Hadir (Present)</option>
-                    <option value="Absent" @selected(old('status') == 'Absent')>Alpa (Absent)</option>
-                    <option value="Leave" @selected(old('status') == 'Leave')>Cuti/Izin (Leave)</option>
+                    <option value="Hadir" @selected(old('status') == 'Hadir')>Hadir</option>
+                    <option value="Alpa" @selected(old('status') == 'Alpa')>Alpa</option>
+                    <option value="Cuti" @selected(old('status') == 'Cuti')>Cuti</option>
                 </select>
                 @error('status') <div class="invalid-feedback">{{ $message }}</div> @enderror
             </div>

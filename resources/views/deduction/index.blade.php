@@ -23,10 +23,10 @@
                             <td>{{ $deduction->employee->first_name }} {{ $deduction->employee->last_name }} ({{ $deduction->employee->employee_number }})</td>
                             <td>{{ $deduction->name }}</td>
                             <td>
-                                @if($deduction->type === 'Fixed')
-                                    <span class="badge bg-primary">Fixed</span>
+                                @if($deduction->type === 'Tetap')
+                                    <span class="badge bg-primary">Tetap</span>
                                 @else
-                                    <span class="badge bg-success">Variable</span>
+                                    <span class="badge bg-success">Variabel</span>
                                 @endif
                             </td>
                             <td>Rp {{ number_format($deduction->amount, 0, ',', '.') }}</td>

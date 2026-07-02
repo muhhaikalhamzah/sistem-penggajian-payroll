@@ -21,7 +21,7 @@ class DeductionFactory extends Factory
             'employee_id' => \App\Models\Employee::factory(),
             'name' => fake()->randomElement(['Potongan BPJS', 'Potongan Koperasi', 'Potongan Keterlambatan']),
             'amount' => fake()->numberBetween(10000, 200000),
-            'type' => fake()->randomElement(['Fixed', 'Variable']),
+            'type' => fake()->randomElement(['Tetap', 'Variabel']),
         ];
     }
 }

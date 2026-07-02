@@ -29,7 +29,7 @@ class AttendanceRecordFactory extends Factory
             'check_in' => $checkIn,
             'check_out' => $checkOut,
             'overtime_hours' => $overtime,
-            'status' => fake()->randomElement(['Present', 'Present', 'Present', 'Present', 'Absent', 'Leave']), // heavily weighted to present
+            'status' => fake()->randomElement(['Hadir', 'Hadir', 'Hadir', 'Hadir', 'Alpa', 'Cuti']), // heavily weighted to present
         ];
     }
 }

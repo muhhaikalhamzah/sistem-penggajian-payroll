@@ -24,12 +24,12 @@
             <tr>
                 <th>Status</th>
                 <td>
-                    @if($leave->status == 'Pending')
-                        <span class="badge bg-warning text-dark">Pending</span>
-                    @elseif($leave->status == 'Approved')
-                        <span class="badge bg-success">Approved</span>
+                    @if($leave->status == 'Menunggu')
+                        <span class="badge bg-warning text-dark">Menunggu</span>
+                    @elseif($leave->status == 'Disetujui')
+                        <span class="badge bg-success">Disetujui</span>
                     @else
-                        <span class="badge bg-danger">Rejected</span>
+                        <span class="badge bg-danger">Ditolak</span>
                     @endif
                 </td>
             </tr>
