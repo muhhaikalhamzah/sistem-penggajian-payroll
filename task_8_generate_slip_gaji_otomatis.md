@@ -13,8 +13,8 @@ Fitur inti yang mengakumulasi gaji pokok, tunjangan, potongan absensi, dan pajak
 4. **Data Dummy (Seeder):** `PayslipSeeder` mensimulasikan slip gaji bulan '10-2023' dengan contoh `gross_salary` Rp 8.500.000, `total_deductions` Rp 150.000, dan `net_salary` Rp 8.350.000.
 
 ## Kriteria Selesai (Definition of Done)
-- [ ] Struktur data payslip telah ter-create di database.
-- [ ] Terdapat interface untuk role Finance membuat / mem-publish slip gaji bulanan.
-- [ ] Karyawan bisa melihat detail slip gaji.
-- [ ] Karyawan bisa mendownload slip gaji dalam bentuk PDF (atau print page).
-- [ ] Seeder berisi history dummy penggajian untuk di-review.
+- [x] Struktur data payslip telah ter-create di database.
+- [x] Terdapat interface untuk role Finance membuat / mem-publish slip gaji bulanan.
+- [x] Karyawan bisa melihat detail slip gaji.
+- [x] Karyawan bisa mendownload slip gaji dalam bentuk PDF (atau print page).
+- [x] Seeder berisi history dummy penggajian untuk di-review.

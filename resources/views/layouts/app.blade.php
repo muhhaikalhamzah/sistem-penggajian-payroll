@@ -330,6 +330,11 @@
                         <i class="bx bx-calendar"></i> Cuti Saya
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a href="{{ route('payslips.index') }}" class="nav-link">
+                        <i class="bx bx-wallet"></i> Slip Gaji
+                    </a>
+                </li>
             @endif
 
             @if (Auth::user()->role === 'finance')
@@ -356,6 +361,14 @@
                         href="{{ route('deduction.index') }}">
                         <i class='bx bx-minus-circle'></i>
                         <span>Potongan</span>
+                    </a>
+                </li>
+                
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('payslips.*') ? '' : 'collapsed' }}"
+                        href="{{ route('payslips.index') }}">
+                        <i class='bx bx-wallet'></i>
+                        <span>Slip Gaji</span>
                     </a>
                 </li>
             @endif

@@ -59,4 +59,9 @@ class Employee extends Model
     {
         return $this->hasMany(TaxRecord::class);
     }
+
+    public function payslips()
+    {
+        return $this->hasMany(Payslip::class);
+    }
 }

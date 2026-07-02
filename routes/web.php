@@ -46,7 +46,13 @@ Route::middleware(['auth', 'role:employee'])->group(function () {
         Route::resource('/allowance', App\Http\Controllers\AllowanceController::class);
         Route::resource('/deduction', App\Http\Controllers\DeductionController::class);
         Route::resource('tax-records', App\Http\Controllers\TaxRecordController::class)->only(['index', 'show']);
+        
+        Route::get('/payslips/generate', [App\Http\Controllers\PayslipController::class, 'create'])->name('payslips.create');
+        Route::post('/payslips/generate', [App\Http\Controllers\PayslipController::class, 'store'])->name('payslips.store');
     });
+
+    Route::resource('payslips', App\Http\Controllers\PayslipController::class)->only(['index', 'show']);
+    Route::get('payslips/{payslip}/print', [App\Http\Controllers\PayslipController::class, 'print'])->name('payslips.print');
 
     Route::get('/setting', [SettingController::class, 'index'])->name('setting.index');
     Route::put('/setting/{setting}/update', [SettingController::class, 'update'])->name('setting.update');
