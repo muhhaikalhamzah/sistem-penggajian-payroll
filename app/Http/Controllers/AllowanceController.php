@@ -25,20 +25,15 @@ class AllowanceController extends Controller
         ]);
     }
 
-    public function store(Request $request)
+    public function store(\App\Http\Requests\StoreAllowanceRequest $request)
     {
-        $validate = $request->validate([
-            'employee_id' => 'required|exists:employees,id',
-            'name' => 'required|string|max:255',
-            'amount' => 'required|numeric|min:0',
-            'type' => 'required|in:Tetap,Variabel',
-        ]);
+        $validate = $request->validated();
 
         DB::beginTransaction();
         try {
             Allowance::create($validate);
             DB::commit();
-            return to_route('allowance.index')->withSuccess('Tunjangan berhasil ditambahkan');
+            return to_route('allowance.index')->withSuccess('Data berhasil ditambahkan');
         } catch (\Exception $e) {
             DB::rollBack();
             return to_route('allowance.create')->withError('Gagal menambahkan data: ' . $e->getMessage());
@@ -62,20 +57,15 @@ class AllowanceController extends Controller
         ]);
     }
 
-    public function update(Request $request, Allowance $allowance)
+    public function update(\App\Http\Requests\UpdateAllowanceRequest $request, Allowance $allowance)
     {
-        $validate = $request->validate([
-            'employee_id' => 'required|exists:employees,id',
-            'name' => 'required|string|max:255',
-            'amount' => 'required|numeric|min:0',
-            'type' => 'required|in:Tetap,Variabel',
-        ]);
+        $validate = $request->validated();
 
         DB::beginTransaction();
         try {
             $allowance->update($validate);
             DB::commit();
-            return to_route('allowance.index')->withSuccess('Tunjangan berhasil diubah');
+            return to_route('allowance.index')->withSuccess('Data berhasil diubah');
         } catch (\Exception $e) {
             DB::rollBack();
             return to_route('allowance.edit', $allowance)->withError('Gagal mengubah data: ' . $e->getMessage());

@@ -26,25 +26,9 @@ class SalaryStructureController extends Controller
         ]);
     }
 
-    public function store(Request $request)
+    public function store(\App\Http\Requests\StoreSalaryStructureRequest $request)
     {
-        $validate = $request->validate([
-            'employee_id' => 'required|exists:employees,id',
-            'basic_salary' => 'required|numeric|min:0',
-            'effective_date' => [
-                'required',
-                'date',
-                Rule::unique('salary_structures')->where(function ($query) use ($request) {
-                    return $query->where('employee_id', $request->employee_id)
-                                 ->where('effective_date', $request->effective_date);
-                }),
-            ],
-        ], [
-            'employee_id.required' => 'Karyawan wajib dipilih',
-            'basic_salary.required' => 'Gaji pokok wajib diisi',
-            'effective_date.required' => 'Tanggal efektif wajib diisi',
-            'effective_date.unique' => 'Karyawan ini sudah memiliki struktur gaji pada tanggal tersebut',
-        ]);
+        $validate = $request->validated();
 
         DB::beginTransaction();
         try {
@@ -74,25 +58,9 @@ class SalaryStructureController extends Controller
         ]);
     }
 
-    public function update(Request $request, SalaryStructure $salaryStructure)
+    public function update(\App\Http\Requests\UpdateSalaryStructureRequest $request, SalaryStructure $salaryStructure)
     {
-        $validate = $request->validate([
-            'employee_id' => 'required|exists:employees,id',
-            'basic_salary' => 'required|numeric|min:0',
-            'effective_date' => [
-                'required',
-                'date',
-                Rule::unique('salary_structures')->ignore($salaryStructure->id)->where(function ($query) use ($request) {
-                    return $query->where('employee_id', $request->employee_id)
-                                 ->where('effective_date', $request->effective_date);
-                }),
-            ],
-        ], [
-            'employee_id.required' => 'Karyawan wajib dipilih',
-            'basic_salary.required' => 'Gaji pokok wajib diisi',
-            'effective_date.required' => 'Tanggal efektif wajib diisi',
-            'effective_date.unique' => 'Karyawan ini sudah memiliki struktur gaji pada tanggal tersebut',
-        ]);
+        $validate = $request->validated();
 
         DB::beginTransaction();
         try {

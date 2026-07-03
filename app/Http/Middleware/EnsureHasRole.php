@@ -16,12 +16,12 @@ class EnsureHasRole
      */
     public function handle(Request $request, Closure $next, ...$roles): Response
     {
-        if (Auth::check() && Auth::user()->role === 'Superadmin') {
+        if (Auth::check() && in_array(strtolower(Auth::user()->role), ['superadmin', 'admin'])) {
             return $next($request);
         }
 
         foreach ($roles as $role) {
-            if (Auth::check() && Auth::user()->role == $role) {
+            if (Auth::check() && strtolower(Auth::user()->role) == strtolower($role)) {
                 return $next($request);
             }
         }

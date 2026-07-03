@@ -70,16 +70,16 @@ class MyLeaveController extends Controller
         return redirect()->route('my-leaves.index')->with('success', 'Pengajuan cuti berhasil dibuat.');
     }
     
-    public function show(LeaveRequest $my_leaf)
+    public function show(LeaveRequest $my_leafe)
     {
         $user = auth()->user();
-        if ($my_leaf->employee_id !== $user->employee->id) {
-            abort(403);
+        if (!$user->employee || $my_leafe->employee_id !== $user->employee->id) {
+            abort(403, 'Akses ditolak: Anda hanya dapat melihat data cuti Anda sendiri.');
         }
         
         return view('my-leave.show', [
             'title' => 'Detail Cuti',
-            'leave' => $my_leaf
+            'leave' => $my_leafe
         ]);
     }
 }

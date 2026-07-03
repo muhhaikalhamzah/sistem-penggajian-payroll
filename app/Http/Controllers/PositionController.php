@@ -23,18 +23,9 @@ class PositionController extends Controller
         ]);
     }
 
-    public function store(Request $request)
+    public function store(\App\Http\Requests\StorePositionRequest $request)
     {
-        $validate = $request->validate([
-            'title' => 'required|string|max:255',
-            'min_salary' => 'required|numeric|min:0',
-            'max_salary' => 'required|numeric|min:0|gte:min_salary',
-        ], [
-            'title.required' => 'Nama jabatan wajib diisi',
-            'min_salary.required' => 'Gaji minimum wajib diisi',
-            'max_salary.required' => 'Gaji maksimum wajib diisi',
-            'max_salary.gte' => 'Gaji maksimum harus lebih besar atau sama dengan gaji minimum',
-        ]);
+        $validate = $request->validated();
 
         DB::beginTransaction();
         try {
@@ -60,21 +51,13 @@ class PositionController extends Controller
         return view('position.edit', [
             'title' => 'Edit Jabatan',
             'position' => $position,
+            'departments' => Department::all(),
         ]);
     }
 
-    public function update(Request $request, Position $position)
+    public function update(\App\Http\Requests\UpdatePositionRequest $request, Position $position)
     {
-        $validate = $request->validate([
-            'title' => 'required|string|max:255',
-            'min_salary' => 'required|numeric|min:0',
-            'max_salary' => 'required|numeric|min:0|gte:min_salary',
-        ], [
-            'title.required' => 'Nama jabatan wajib diisi',
-            'min_salary.required' => 'Gaji minimum wajib diisi',
-            'max_salary.required' => 'Gaji maksimum wajib diisi',
-            'max_salary.gte' => 'Gaji maksimum harus lebih besar atau sama dengan gaji minimum',
-        ]);
+        $validate = $request->validated();
 
         DB::beginTransaction();
         try {

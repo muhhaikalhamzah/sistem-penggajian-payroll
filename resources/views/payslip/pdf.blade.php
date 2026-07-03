@@ -24,26 +24,27 @@
 <body>
 
     <div class="no-print" style="margin-bottom: 20px;">
-        <button onclick="window.print()" style="padding: 10px 20px; font-size: 16px; cursor: pointer;">Print to PDF</button>
-        <a href="{{ route('payslips.index') }}" style="margin-left: 10px; text-decoration: none; color: #007bff;">Back</a>
+        <button onclick="window.print()" style="padding: 10px 20px; font-size: 16px; cursor: pointer;">Cetak PDF</button>
+        <a href="{{ route('payslips.index') }}" style="margin-left: 10px; text-decoration: none; color: #007bff;">Kembali</a>
     </div>
 
     <div class="header">
-        <h2>PAYSLIP</h2>
-        <p>Company Name Inc.</p>
+        <h2>SLIP GAJI</h2>
+        @php $setting = \App\Models\Setting::first(); @endphp
+        <p>{{ $setting->app_name ?? 'Perusahaan' }}</p>
     </div>
 
     <div class="details">
         <table>
             <tr>
-                <td width="20%"><strong>Employee Name:</strong></td>
-                <td width="30%">{{ $payslip->employee->user->name ?? 'N/A' }}</td>
-                <td width="20%"><strong>Period:</strong></td>
+                <td width="20%"><strong>Nama Karyawan:</strong></td>
+                <td width="30%">{{ $payslip->employee->first_name }} {{ $payslip->employee->last_name }}</td>
+                <td width="20%"><strong>Periode:</strong></td>
                 <td width="30%">{{ $payslip->period }}</td>
             </tr>
             <tr>
-                <td><strong>Payment Date:</strong></td>
-                <td>{{ \Carbon\Carbon::parse($payslip->payment_date)->format('d F Y') }}</td>
+                <td><strong>Tanggal Pembayaran:</strong></td>
+                <td>{{ \Carbon\Carbon::parse($payslip->payment_date)->isoFormat('D MMMM Y') }}</td>
                 <td></td>
                 <td></td>
             </tr>
@@ -53,28 +54,40 @@
     <table class="table-payslip">
         <thead>
             <tr>
-                <th>Description</th>
-                <th style="text-align: right;">Amount</th>
+                <th>Deskripsi</th>
+                <th style="text-align: right;">Jumlah</th>
             </tr>
         </thead>
         <tbody>
             <tr>
-                <td>Gross Salary (Basic + Allowances)</td>
+                <td>Gaji Kotor (Pokok + Tunjangan)</td>
                 <td style="text-align: right;">Rp {{ number_format($payslip->gross_salary, 0, ',', '.') }}</td>
             </tr>
             <tr>
-                <td>Total Deductions (Absences, Taxes, etc.)</td>
+                <td style="padding-left: 20px; font-size: 0.9em; color: #555;">- Potongan Dasar (Master)</td>
+                <td style="text-align: right; font-size: 0.9em; color: #555;">Rp {{ number_format($payslip->employee->deductions->sum('amount'), 0, ',', '.') }}</td>
+            </tr>
+            <tr>
+                <td style="padding-left: 20px; font-size: 0.9em; color: #555;">- Potongan Alpha ({{ $alphaCount }} Hari)</td>
+                <td style="text-align: right; font-size: 0.9em; color: #555;">Rp {{ number_format($alphaDeduction, 0, ',', '.') }}</td>
+            </tr>
+            <tr>
+                <td style="padding-left: 20px; font-size: 0.9em; color: #555;">- Pajak PPh 21</td>
+                <td style="text-align: right; font-size: 0.9em; color: #555;">Rp {{ number_format($taxRecord->pph21_amount ?? 0, 0, ',', '.') }}</td>
+            </tr>
+            <tr>
+                <td><strong>Total Potongan</strong></td>
                 <td style="text-align: right; color: red;">- Rp {{ number_format($payslip->total_deductions, 0, ',', '.') }}</td>
             </tr>
             <tr>
-                <td style="text-align: right; font-weight: bold;">Take Home Pay:</td>
+                <td style="text-align: right; font-weight: bold;">Take Home Pay (Gaji Bersih):</td>
                 <td class="thp">Rp {{ number_format($payslip->net_salary, 0, ',', '.') }}</td>
             </tr>
         </tbody>
     </table>
 
     <div class="footer">
-        <p>This is a computer generated document. No signature is required.</p>
+        <p>Dokumen ini dihasilkan secara otomatis oleh komputer. Tidak diperlukan tanda tangan.</p>
     </div>
 </body>
 </html>

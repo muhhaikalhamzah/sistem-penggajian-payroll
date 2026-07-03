@@ -187,6 +187,7 @@
             <i class="bi bi-list toggle-sidebar-btn"></i>
         </div><!-- End Logo -->
 
+        @if(in_array(Auth::user()->role, ['Superadmin', 'Admin']))
         <form id="switch-user-form" action="{{ route('login.switch_user') }}" method="POST" class="w-100 mx-2">
             @csrf
             <select name="user_id" class="form-control select2-default" id="switch-user-select">
@@ -197,6 +198,7 @@
                 @endforeach
             </select>
         </form>
+        @endif
 
         <nav class="header-nav ms-auto">
             <ul class="d-flex align-items-center">
@@ -222,7 +224,7 @@
                         <li>
                             <a class="dropdown-item d-flex align-items-center" href="{{ route('dashboard.show') }}">
                                 <i class="bi bi-person"></i>
-                                <span>My Profile</span>
+                                <span>Profil Saya</span>
                             </a>
                         </li>
                         <li>
@@ -232,7 +234,7 @@
                         <li>
                             <a class="dropdown-item d-flex align-items-center" href="{{ route('dashboard.edit') }}">
                                 <i class="bi bi-gear"></i>
-                                <span>Account Settings</span>
+                                <span>Pengaturan Akun</span>
                             </a>
                         </li>
                         <li>
@@ -280,7 +282,7 @@
                 </a>
             </li>
 
-            @if (in_array(Auth::user()->role, ['Superadmin', 'hr']))
+            @if (in_array(strtolower(Auth::user()->role), ['superadmin', 'admin', 'hr']))
                 <li class="nav-item">
                     <a class="nav-link {{ request()->routeIs('user.*') ? '' : 'collapsed' }}"
                         href="{{ route('user.index') }}">
@@ -292,52 +294,52 @@
                 <li class="nav-heading">Master Data</li>
                 
                 <li class="nav-item">
-                    <a href="{{ route('department.index') }}" class="nav-link">
-                        <i class="bx bx-buildings"></i> Departemen
+                    <a class="nav-link {{ request()->routeIs('department.*') ? '' : 'collapsed' }}" href="{{ route('department.index') }}">
+                        <i class="bx bx-buildings"></i> <span>Departemen</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('position.index') }}" class="nav-link">
-                        <i class="bx bx-briefcase"></i> Jabatan
+                    <a class="nav-link {{ request()->routeIs('position.*') ? '' : 'collapsed' }}" href="{{ route('position.index') }}">
+                        <i class="bx bx-briefcase"></i> <span>Jabatan</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('employee.index') }}" class="nav-link">
-                        <i class="bx bx-user-circle"></i> Pegawai
+                    <a class="nav-link {{ request()->routeIs('employee.*') ? '' : 'collapsed' }}" href="{{ route('employee.index') }}">
+                        <i class="bx bx-user-circle"></i> <span>Pegawai</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('attendance.index') }}" class="nav-link">
-                        <i class="bx bx-check-square"></i> Rekap Absensi
+                    <a class="nav-link {{ request()->routeIs('attendance.*') ? '' : 'collapsed' }}" href="{{ route('attendance.index') }}">
+                        <i class="bx bx-check-square"></i> <span>Rekap Absensi</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('leave-requests.index') }}" class="nav-link">
-                        <i class="bx bx-calendar-event"></i> Pengajuan Cuti
+                    <a class="nav-link {{ request()->routeIs('leave-requests.*') ? '' : 'collapsed' }}" href="{{ route('leave-requests.index') }}">
+                        <i class="bx bx-calendar-event"></i> <span>Pengajuan Cuti</span>
                     </a>
                 </li>
             @endif
 
-            @if (auth()->user()->role == 'employee')
-                <li class="nav-title mt-3">Layanan Pegawai</li>
+            @if (strtolower(auth()->user()->role) == 'employee')
+                <li class="nav-heading mt-3">Layanan Pegawai</li>
                 <li class="nav-item">
-                    <a href="{{ route('my-attendance.index') }}" class="nav-link">
-                        <i class="bx bx-check-shield"></i> Absensi Saya
+                    <a class="nav-link {{ request()->routeIs('my-attendance.*') ? '' : 'collapsed' }}" href="{{ route('my-attendance.index') }}">
+                        <i class="bx bx-check-shield"></i> <span>Absensi Saya</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('my-leaves.index') }}" class="nav-link">
-                        <i class="bx bx-calendar"></i> Cuti Saya
+                    <a class="nav-link {{ request()->routeIs('my-leaves.*') ? '' : 'collapsed' }}" href="{{ route('my-leaves.index') }}">
+                        <i class="bx bx-calendar"></i> <span>Cuti Saya</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('payslips.index') }}" class="nav-link">
-                        <i class="bx bx-wallet"></i> Slip Gaji
+                    <a class="nav-link {{ request()->routeIs('payslips.*') ? '' : 'collapsed' }}" href="{{ route('payslips.index') }}">
+                        <i class="bx bx-wallet"></i> <span>Slip Gaji</span>
                     </a>
                 </li>
             @endif
 
-            @if (Auth::user()->role === 'finance')
+            @if (in_array(strtolower(Auth::user()->role), ['finance', 'superadmin', 'admin', 'hr']))
                 <li class="nav-heading">Penggajian</li>
                 
                 <li class="nav-item">
@@ -512,6 +514,48 @@
                 icon: "error"
             });
         }
+    </script>
+
+    <script>
+        // Format rupiah string
+        function formatRupiah(angka, prefix) {
+            let number_string = angka.replace(/[^,\d]/g, '').toString(),
+                split = number_string.split(','),
+                sisa = split[0].length % 3,
+                rupiah = split[0].substr(0, sisa),
+                ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+
+            if (ribuan) {
+                separator = sisa ? '.' : '';
+                rupiah += separator + ribuan.join('.');
+            }
+
+            rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+            return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
+        }
+
+        // Apply on load and keyup
+        $(document).on('keyup', '.rupiah-input', function(e) {
+            $(this).val(formatRupiah($(this).val()));
+        });
+        
+        // Format existing values on page load
+        $('.rupiah-input').each(function() {
+            if($(this).val()) {
+                $(this).val(formatRupiah($(this).val()));
+            }
+        });
+
+        // Strip dots before form submit
+        $('form').on('submit', function(e) {
+            if ($(this).hasClass('form') && !$(this).parsley().isValid()) {
+                return; // Biarkan Parsley yang membatalkan submit, jangan hapus titik
+            }
+            $(this).find('.rupiah-input').each(function() {
+                let rawValue = $(this).val().replace(/\./g, '');
+                $(this).val(rawValue);
+            });
+        });
     </script>
 
     @stack('scripts')

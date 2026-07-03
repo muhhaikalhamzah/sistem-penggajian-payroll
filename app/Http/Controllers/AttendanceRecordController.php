@@ -14,7 +14,7 @@ class AttendanceRecordController extends Controller
     {
         return view('attendance.index', [
             'title' => 'Rekap Absensi',
-            'attendances' => AttendanceRecord::with('employee')->latest('record_date')->get(),
+            'attendances' => AttendanceRecord::with('employee')->latest('record_date')->latest('id')->get(),
         ]);
     }
 

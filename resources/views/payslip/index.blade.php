@@ -34,7 +34,7 @@
                         <thead>
                             <tr>
                                 <th>#</th>
-                                @if(auth()->user()->hasRole('finance') || auth()->user()->hasRole('Superadmin'))
+                                @if(auth()->user()->hasRole('finance') || in_array(auth()->user()->role, ['Superadmin', 'Admin']))
                                 <th>Employee Name</th>
                                 @endif
                                 <th>Period</th>
@@ -47,7 +47,7 @@
                             @forelse($payslips as $key => $payslip)
                             <tr>
                                 <td>{{ $key + 1 }}</td>
-                                @if(auth()->user()->hasRole('finance') || auth()->user()->hasRole('Superadmin'))
+                                @if(auth()->user()->hasRole('finance') || in_array(auth()->user()->role, ['Superadmin', 'Admin']))
                                 <td>{{ $payslip->employee->user->name ?? 'N/A' }}</td>
                                 @endif
                                 <td>{{ $payslip->period }}</td>
@@ -60,7 +60,7 @@
                             </tr>
                             @empty
                             <tr>
-                                <td colspan="{{ (auth()->user()->hasRole('finance') || auth()->user()->hasRole('Superadmin')) ? 6 : 5 }}" class="text-center">No payslips found.</td>
+                                <td colspan="{{ (auth()->user()->hasRole('finance') || in_array(auth()->user()->role, ['Superadmin', 'Admin'])) ? 6 : 5 }}" class="text-center">No payslips found.</td>
                             </tr>
                             @endforelse
                         </tbody>

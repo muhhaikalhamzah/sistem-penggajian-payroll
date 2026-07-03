@@ -1,5 +1,27 @@
 <x-app>
     <x-slot:title>{{ $title }}</x-slot:title>
+
+    <div class="card shadow-lg p-3 mb-4">
+        <h5 class="card-title">Aksi Hari Ini ({{ now()->format('d M Y') }})</h5>
+        <div class="d-flex gap-2">
+            @if(!$todayAttendance)
+                <form action="{{ route('my-attendance.check_in') }}" method="POST">
+                    @csrf
+                    <button type="submit" class="btn btn-primary"><i class="bi bi-box-arrow-in-right"></i> Check In Sekarang</button>
+                </form>
+            @elseif(!$todayAttendance->check_out)
+                <button class="btn btn-success" disabled><i class="bi bi-check-circle"></i> Sudah Check In ({{ date('H:i', strtotime($todayAttendance->check_in)) }})</button>
+                <form action="{{ route('my-attendance.check_out') }}" method="POST">
+                    @csrf
+                    <button type="submit" class="btn btn-warning"><i class="bi bi-box-arrow-right"></i> Check Out Sekarang</button>
+                </form>
+            @else
+                <button class="btn btn-success" disabled><i class="bi bi-check-circle"></i> Sudah Check In ({{ date('H:i', strtotime($todayAttendance->check_in)) }})</button>
+                <button class="btn btn-secondary" disabled><i class="bi bi-check-circle"></i> Sudah Check Out ({{ date('H:i', strtotime($todayAttendance->check_out)) }})</button>
+            @endif
+        </div>
+    </div>
+
     <div class="card shadow-lg p-3">
         <div class="table-responsive">
             <table class="table table-bordered table-striped w-100" id="data-table">

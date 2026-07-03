@@ -25,20 +25,15 @@ class DeductionController extends Controller
         ]);
     }
 
-    public function store(Request $request)
+    public function store(\App\Http\Requests\StoreDeductionRequest $request)
     {
-        $validate = $request->validate([
-            'employee_id' => 'required|exists:employees,id',
-            'name' => 'required|string|max:255',
-            'amount' => 'required|numeric|min:0',
-            'type' => 'required|in:Tetap,Variabel',
-        ]);
+        $validate = $request->validated();
 
         DB::beginTransaction();
         try {
             Deduction::create($validate);
             DB::commit();
-            return to_route('deduction.index')->withSuccess('Potongan berhasil ditambahkan');
+            return to_route('deduction.index')->withSuccess('Data berhasil ditambahkan');
         } catch (\Exception $e) {
             DB::rollBack();
             return to_route('deduction.create')->withError('Gagal menambahkan data: ' . $e->getMessage());
@@ -62,20 +57,15 @@ class DeductionController extends Controller
         ]);
     }
 
-    public function update(Request $request, Deduction $deduction)
+    public function update(\App\Http\Requests\UpdateDeductionRequest $request, Deduction $deduction)
     {
-        $validate = $request->validate([
-            'employee_id' => 'required|exists:employees,id',
-            'name' => 'required|string|max:255',
-            'amount' => 'required|numeric|min:0',
-            'type' => 'required|in:Tetap,Variabel',
-        ]);
+        $validate = $request->validated();
 
         DB::beginTransaction();
         try {
             $deduction->update($validate);
             DB::commit();
-            return to_route('deduction.index')->withSuccess('Potongan berhasil diubah');
+            return to_route('deduction.index')->withSuccess('Data berhasil diubah');
         } catch (\Exception $e) {
             DB::rollBack();
             return to_route('deduction.edit', $deduction)->withError('Gagal mengubah data: ' . $e->getMessage());

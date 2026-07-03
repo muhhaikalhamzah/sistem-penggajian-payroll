@@ -26,8 +26,8 @@ class DatabaseSeeder extends Seeder
             DeductionSeeder::class,
             AttendanceRecordSeeder::class,
             LeaveRequestSeeder::class,
-            TaxRecordSeeder::class,
-            PayslipSeeder::class,
+            // TaxRecordSeeder::class,
+            // PayslipSeeder::class,
         ]);
     }
 }

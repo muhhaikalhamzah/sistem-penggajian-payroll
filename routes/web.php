@@ -17,7 +17,10 @@ Route::middleware('guest')->group(function () {
 
 Route::middleware('auth')->group(function () {
     Route::get('/logout', [LoginController::class, 'logout'])->name('login.logout');
-    Route::post('/switch-user', [LoginController::class, 'switchUser'])->name('login.switch_user');
+    
+    Route::middleware('role:Superadmin,Admin')->group(function () {
+        Route::post('/switch-user', [LoginController::class, 'switchUser'])->name('login.switch_user');
+    });
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
     Route::get('/dashboard/show', [DashboardController::class, 'show'])->name('dashboard.show');
@@ -38,10 +41,12 @@ Route::middleware('auth')->group(function () {
 // Employee Routes
 Route::middleware(['auth', 'role:employee'])->group(function () {
     Route::get('/my-attendance', [App\Http\Controllers\MyAttendanceController::class, 'index'])->name('my-attendance.index');
+    Route::post('/my-attendance/check-in', [App\Http\Controllers\MyAttendanceController::class, 'checkIn'])->name('my-attendance.check_in');
+    Route::post('/my-attendance/check-out', [App\Http\Controllers\MyAttendanceController::class, 'checkOut'])->name('my-attendance.check_out');
     Route::resource('my-leaves', App\Http\Controllers\MyLeaveController::class)->only(['index', 'create', 'store', 'show']);
 });
 
-    Route::middleware('role:finance')->group(function () {
+    Route::middleware('role:finance,hr')->group(function () {
         Route::resource('/salary-structure', App\Http\Controllers\SalaryStructureController::class);
         Route::resource('/allowance', App\Http\Controllers\AllowanceController::class);
         Route::resource('/deduction', App\Http\Controllers\DeductionController::class);
@@ -54,6 +59,8 @@ Route::middleware(['auth', 'role:employee'])->group(function () {
     Route::resource('payslips', App\Http\Controllers\PayslipController::class)->only(['index', 'show']);
     Route::get('payslips/{payslip}/print', [App\Http\Controllers\PayslipController::class, 'print'])->name('payslips.print');
 
-    Route::get('/setting', [SettingController::class, 'index'])->name('setting.index');
-    Route::put('/setting/{setting}/update', [SettingController::class, 'update'])->name('setting.update');
+    Route::middleware('role:Superadmin,Admin')->group(function () {
+        Route::get('/setting', [SettingController::class, 'index'])->name('setting.index');
+        Route::put('/setting/{setting}/update', [SettingController::class, 'update'])->name('setting.update');
+    });
 });

@@ -31,8 +31,8 @@
             </div>
             <div class="mb-3">
                 <label for="amount" class="form-label required">Jumlah / Nominal (Rp)</label>
-                <input class="form-control @error('amount') is-invalid @enderror" type="number" id="amount"
-                    name="amount" required value="{{ old('amount', $deduction->amount) }}" min="0">
+                <input class="form-control rupiah-input @error('amount') is-invalid @enderror" type="text" id="amount"
+                    name="amount" required value="{{ old('amount', round($deduction->amount)) }}">
                 @error('amount') <div class="invalid-feedback">{{ $message }}</div> @enderror
             </div>
             

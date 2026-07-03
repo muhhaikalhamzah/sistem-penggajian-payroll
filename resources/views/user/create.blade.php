@@ -72,6 +72,7 @@
                             name="role" required>
                             <option value="">Pilih Role</option>
                             <option value="Superadmin" @selected(old('role') == 'Superadmin')>Superadmin</option>
+                            <option value="Admin" @selected(old('role') == 'Admin')>Admin</option>
                             <option value="hr" @selected(old('role') == 'hr')>HR</option>
                             <option value="finance" @selected(old('role') == 'finance')>Finance</option>
                             <option value="employee" @selected(old('role') == 'employee')>Employee</option>

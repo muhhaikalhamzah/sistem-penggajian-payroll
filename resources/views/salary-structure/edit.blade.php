@@ -16,8 +16,8 @@
             </div>
             <div class="mb-3">
                 <label for="basic_salary" class="form-label required">Gaji Pokok</label>
-                <input class="form-control @error('basic_salary') is-invalid @enderror" type="number" id="basic_salary"
-                    name="basic_salary" required value="{{ old('basic_salary', $salaryStructure->basic_salary) }}" min="0">
+                <input class="form-control rupiah-input @error('basic_salary') is-invalid @enderror" type="text" id="basic_salary"
+                    name="basic_salary" required value="{{ old('basic_salary', round($salaryStructure->basic_salary)) }}">
                 @error('basic_salary') <div class="invalid-feedback">{{ $message }}</div> @enderror
             </div>
             <div class="mb-3">
