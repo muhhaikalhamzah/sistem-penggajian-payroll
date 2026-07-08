@@ -60,8 +60,16 @@
         </thead>
         <tbody>
             <tr>
-                <td>Gaji Kotor (Pokok + Tunjangan)</td>
-                <td style="text-align: right;">Rp {{ number_format($payslip->gross_salary, 0, ',', '.') }}</td>
+                <td>Gaji Pokok & Tunjangan</td>
+                <td style="text-align: right;">Rp {{ number_format($payslip->gross_salary - $overtimePay, 0, ',', '.') }}</td>
+            </tr>
+            <tr>
+                <td style="padding-left: 20px; font-size: 0.9em; color: #555;">+ Lembur ({{ $overtimeHours }} Jam)</td>
+                <td style="text-align: right; font-size: 0.9em; color: #555;">Rp {{ number_format($overtimePay, 0, ',', '.') }}</td>
+            </tr>
+            <tr>
+                <td><strong>Total Penerimaan Kotor</strong></td>
+                <td style="text-align: right;"><strong>Rp {{ number_format($payslip->gross_salary, 0, ',', '.') }}</strong></td>
             </tr>
             <tr>
                 <td style="padding-left: 20px; font-size: 0.9em; color: #555;">- Potongan Dasar (Master)</td>

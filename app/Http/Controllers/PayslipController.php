@@ -53,11 +53,10 @@ class PayslipController extends Controller
 
             $basicSalary = $emp->salaryStructures->sortByDesc('effective_date')->first()->basic_salary ?? 0;
             $totalAllowances = $emp->allowances->sum('amount');
-            $grossSalary = $basicSalary + $totalAllowances;
-
-            // Calculate Alpha Deduction
+            // Calculate Alpha & Overtime
             $parts = explode('-', $period);
             $alphaCount = 0;
+            $overtimeHours = 0;
             if(count($parts) == 2) {
                 $dbMonth = $parts[0];
                 $dbYear = $parts[1];
@@ -66,8 +65,16 @@ class PayslipController extends Controller
                     ->whereYear('record_date', $dbYear)
                     ->where('status', 'Alpa')
                     ->count();
+                    
+                $overtimeHours = \App\Models\AttendanceRecord::where('employee_id', $emp->id)
+                    ->whereMonth('record_date', $dbMonth)
+                    ->whereYear('record_date', $dbYear)
+                    ->sum('overtime_hours');
             }
             $alphaDeduction = ($basicSalary / $workingDays) * $alphaCount;
+            $overtimePay = ($basicSalary / 173) * $overtimeHours;
+            
+            $grossSalary = $basicSalary + $totalAllowances + $overtimePay;
             
             $baseDeductions = $emp->deductions->sum('amount') + $alphaDeduction;
 
@@ -148,26 +155,34 @@ class PayslipController extends Controller
             ->where('period', $payslip->period)
             ->first();
 
-        // Calculate Alpha Deduction exactly as stored
+        // Calculate Alpha Deduction & Overtime exactly as stored
         $parts = explode('-', $payslip->period);
         $alphaCount = 0;
+        $overtimeHours = 0;
         if (count($parts) == 2) {
             $alphaCount = \App\Models\AttendanceRecord::where('employee_id', $payslip->employee_id)
                 ->whereMonth('record_date', $parts[0])
                 ->whereYear('record_date', $parts[1])
                 ->where('status', 'Alpa')
                 ->count();
+            $overtimeHours = \App\Models\AttendanceRecord::where('employee_id', $payslip->employee_id)
+                ->whereMonth('record_date', $parts[0])
+                ->whereYear('record_date', $parts[1])
+                ->sum('overtime_hours');
         }
         $basicSalary = $payslip->employee->salaryStructures->sortByDesc('effective_date')->first()->basic_salary ?? 0;
         $workingDays = config('payroll.working_days_per_month', 22);
         $alphaDeduction = ($basicSalary / $workingDays) * $alphaCount;
+        $overtimePay = ($basicSalary / 173) * $overtimeHours;
         
         return view('payslip.show', [
             'title' => 'Detail Payslip',
             'payslip' => $payslip,
             'taxRecord' => $taxRecord,
             'alphaCount' => $alphaCount,
-            'alphaDeduction' => $alphaDeduction
+            'alphaDeduction' => $alphaDeduction,
+            'overtimeHours' => $overtimeHours,
+            'overtimePay' => $overtimePay
         ]);
     }
 
@@ -186,26 +201,34 @@ class PayslipController extends Controller
             ->where('period', $payslip->period)
             ->first();
 
-        // Calculate Alpha Deduction exactly as stored
+        // Calculate Alpha Deduction & Overtime exactly as stored
         $parts = explode('-', $payslip->period);
         $alphaCount = 0;
+        $overtimeHours = 0;
         if (count($parts) == 2) {
             $alphaCount = \App\Models\AttendanceRecord::where('employee_id', $payslip->employee_id)
                 ->whereMonth('record_date', $parts[0])
                 ->whereYear('record_date', $parts[1])
                 ->where('status', 'Alpa')
                 ->count();
+            $overtimeHours = \App\Models\AttendanceRecord::where('employee_id', $payslip->employee_id)
+                ->whereMonth('record_date', $parts[0])
+                ->whereYear('record_date', $parts[1])
+                ->sum('overtime_hours');
         }
         $basicSalary = $payslip->employee->salaryStructures->sortByDesc('effective_date')->first()->basic_salary ?? 0;
         $workingDays = config('payroll.working_days_per_month', 22);
         $alphaDeduction = ($basicSalary / $workingDays) * $alphaCount;
+        $overtimePay = ($basicSalary / 173) * $overtimeHours;
         
         return view('payslip.pdf', [
             'title' => 'Cetak Payslip',
             'payslip' => $payslip,
             'taxRecord' => $taxRecord,
             'alphaCount' => $alphaCount,
-            'alphaDeduction' => $alphaDeduction
+            'alphaDeduction' => $alphaDeduction,
+            'overtimeHours' => $overtimeHours,
+            'overtimePay' => $overtimePay
         ]);
     }
 }

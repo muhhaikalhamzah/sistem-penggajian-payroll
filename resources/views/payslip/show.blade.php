@@ -36,11 +36,17 @@
                         <div class="col-lg-6">
                             <h6 class="fw-bold">Penerimaan (Earnings)</h6>
                             <div class="d-flex justify-content-between mb-2">
-                                <span>Gaji Kotor</span>
-                                <span>Rp {{ number_format($payslip->gross_salary, 0, ',', '.') }}</span>
+                                <span>Gaji Pokok & Tunjangan</span>
+                                <span>Rp {{ number_format($payslip->gross_salary - $overtimePay, 0, ',', '.') }}</span>
                             </div>
-                            <div class="text-muted small">
-                                <em>Termasuk gaji pokok dan seluruh tunjangan.</em>
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>Lembur ({{ $overtimeHours }} Jam)</span>
+                                <span>Rp {{ number_format($overtimePay, 0, ',', '.') }}</span>
+                            </div>
+                            <hr class="my-1">
+                            <div class="d-flex justify-content-between mb-2 fw-bold">
+                                <span>Total Penerimaan Kotor</span>
+                                <span>Rp {{ number_format($payslip->gross_salary, 0, ',', '.') }}</span>
                             </div>
                         </div>
 
