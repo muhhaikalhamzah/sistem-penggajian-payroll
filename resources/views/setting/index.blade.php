@@ -66,9 +66,9 @@
                 </div>
 
                 <div class="col-md-3">
-                    <label for="logo" class="form-label">Logo</label>
-                    <input class="form-control @error('logo') is-invalid  @enderror" type="file" id="upload"
-                        name="logo">
+                    <label for="upload" class="form-label">Logo</label>
+                    <input class="form-control @error('logo') is-invalid  @enderror" type="file" id="upload" accept="image/*">
+                    <input type="hidden" name="logo_base64" id="logo_base64">
                     @error('logo')
                         <div class="invalid-feedback">
                             {{ $message }}
@@ -89,6 +89,11 @@
     @endpush
 
     @push('scripts')
+        <script>
+            $(document).ready(function() {
+                initCropper('upload', 'preview', 'logo_base64', NaN); // NaN = free crop
+            });
+        </script>
     @endpush
 
 </x-app>

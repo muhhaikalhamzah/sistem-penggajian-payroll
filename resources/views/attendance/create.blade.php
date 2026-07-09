@@ -13,11 +13,20 @@
                 </select>
                 @error('employee_id') <div class="invalid-feedback">{{ $message }}</div> @enderror
             </div>
-            <div class="mb-3">
-                <label for="record_date" class="form-label required">Tanggal</label>
-                <input class="form-control @error('record_date') is-invalid @enderror" type="date" id="record_date"
-                    name="record_date" required value="{{ old('record_date') ?: date('Y-m-d') }}">
-                @error('record_date') <div class="invalid-feedback">{{ $message }}</div> @enderror
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="record_date" class="form-label required">Tanggal Masuk</label>
+                    <input class="form-control @error('record_date') is-invalid @enderror" type="date" id="record_date"
+                        name="record_date" required value="{{ old('record_date') ?: date('Y-m-d') }}">
+                    @error('record_date') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="check_out_date" class="form-label">Tanggal Keluar</label>
+                    <input class="form-control @error('check_out_date') is-invalid @enderror" type="date" id="check_out_date"
+                        name="check_out_date" value="{{ old('check_out_date') }}">
+                    <small class="text-muted">Isi jika pulang di hari berikutnya (lembur lintas hari)</small>
+                    @error('check_out_date') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                </div>
             </div>
             
             <div class="row">

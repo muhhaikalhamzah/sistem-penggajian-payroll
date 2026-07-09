@@ -14,7 +14,7 @@
                         <th scope="col">Mulai</th>
                         <th scope="col">Selesai</th>
                         <th scope="col">Status</th>
-                        <th scope="col">Action</th>
+                        <th scope="col">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -44,7 +44,7 @@
                                             @csrf
                                             @method('PUT')
                                             <input type="hidden" name="status" value="Disetujui">
-                                            <button type="submit" class="btn btn-success btn-sm" title="Approve">
+                                            <button type="submit" class="btn btn-success btn-sm" title="Setujui">
                                                 <i class='bx bx-check'></i>
                                             </button>
                                         </form>
@@ -52,7 +52,7 @@
                                             @csrf
                                             @method('PUT')
                                             <input type="hidden" name="status" value="Ditolak">
-                                            <button type="submit" class="btn btn-danger btn-sm" title="Reject">
+                                            <button type="submit" class="btn btn-danger btn-sm" title="Tolak">
                                                 <i class='bx bx-x'></i>
                                             </button>
                                         </form>

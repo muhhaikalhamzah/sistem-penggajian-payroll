@@ -12,7 +12,7 @@
                         <th scope="col">Karyawan (NIK)</th>
                         <th scope="col">Gaji Pokok</th>
                         <th scope="col">Berlaku Sejak</th>
-                        <th scope="col">Action</th>
+                        <th scope="col">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>

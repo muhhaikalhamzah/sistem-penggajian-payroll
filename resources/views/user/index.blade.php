@@ -7,7 +7,9 @@
     <div class="card shadow-lg p-3">
 
         <div class="mb-3">
+            @can('create', App\Models\User::class)
             <a class="btn btn-primary" href="{{ route('user.create') }}" role="button">Tambah</a>
+            @endcan
         </div>
 
         <div class="table-responsive">
@@ -18,7 +20,7 @@
                         <th scope="col">Name</th>
                         <th scope="col">Email</th>
                         <th scope="col">Role</th>
-                        <th scope="col">Action</th>
+                        <th scope="col">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -29,17 +31,23 @@
                             <td>{{ $user->email }}</td>
                             <td>{{ $user->role }}</td>
                             <td>
+                                @can('view', $user)
                                 <button type="button" class="btn btn-info btn-sm btn-detail"
                                     data-route="{{ route('user.show', $user) }}">
                                     <i class='bx bx-show'></i>
                                 </button>
+                                @endcan
+                                @can('update', $user)
                                 <a href="{{ route('user.edit', $user) }}" class="btn btn-warning btn-sm">
                                     <i class='bx bx-edit-alt'></i>
                                 </a>
+                                @endcan
+                                @can('delete', $user)
                                 <button type="button" class="btn btn-danger btn-sm btn-delete" data-bs-toggle="modal"
                                     data-bs-target="#deleteModal" data-route="{{ route('user.destroy', $user) }}">
                                     <i class='bx bx-trash'></i>
                                 </button>
+                                @endcan
                             </td>
                         </tr>
                     @endforeach

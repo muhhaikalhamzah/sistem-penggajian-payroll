@@ -2,7 +2,9 @@
     <x-slot:title>{{ $title }}</x-slot:title>
     <div class="card shadow-lg p-3">
         <div class="mb-3">
+            @can('create', App\Models\Employee::class)
             <a class="btn btn-primary" href="{{ route('employee.create') }}" role="button">Tambah</a>
+            @endcan
         </div>
         <div class="table-responsive">
             <table class="table table-bordered table-striped w-100" id="data-table">
@@ -13,7 +15,7 @@
                         <th scope="col">Departemen</th>
                         <th scope="col">Jabatan</th>
                         <th scope="col">PTKP</th>
-                        <th scope="col">Action</th>
+                        <th scope="col">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -26,16 +28,22 @@
                             <td>{{ $employee->ptkp_status }}</td>
                             <td>
                                 <div class="d-flex gap-1 justify-content-center">
+                                @can('view', $employee)
                                 <a href="{{ route('employee.show', $employee) }}" class="btn btn-info btn-sm">
                                     <i class='bx bx-info-circle'></i>
                                 </a>
+                                @endcan
+                                @can('update', $employee)
                                 <a href="{{ route('employee.edit', $employee) }}" class="btn btn-warning btn-sm">
                                     <i class='bx bx-edit-alt'></i>
                                 </a>
+                                @endcan
+                                @can('delete', $employee)
                                 <button type="button" class="btn btn-danger btn-sm btn-delete" data-bs-toggle="modal"
                                     data-bs-target="#deleteModal" data-route="{{ route('employee.destroy', $employee) }}">
                                     <i class='bx bx-trash'></i>
                                 </button>
+                                @endcan>
                                 </div>
                             </td>
                         </tr>

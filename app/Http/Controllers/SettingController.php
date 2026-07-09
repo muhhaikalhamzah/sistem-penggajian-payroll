@@ -46,10 +46,19 @@ class SettingController extends Controller
 
         try {
 
-            if ($request->file('logo')) {
-                $validate['logo'] = $request->file('logo')->store('img', 'public');
-                if ($setting->logo && Storage::disk('public')->exists($setting->logo)) {
-                    Storage::disk('public')->delete($setting->logo);
+            if ($request->logo_base64) {
+                // Decode base64 image
+                $image_parts = explode(";base64,", $request->logo_base64);
+                if (count($image_parts) == 2) {
+                    $image_base64 = base64_decode($image_parts[1]);
+                    $file_name = 'img/' . uniqid() . '.png';
+                    
+                    Storage::disk('public')->put($file_name, $image_base64);
+                    $validate['logo'] = $file_name;
+
+                    if ($setting->logo && Storage::disk('public')->exists($setting->logo)) {
+                        Storage::disk('public')->delete($setting->logo);
+                    }
                 }
             }
 

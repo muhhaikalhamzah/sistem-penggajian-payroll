@@ -10,7 +10,7 @@
                         <th scope="col">Periode</th>
                         <th scope="col">Penghasilan Kena Pajak</th>
                         <th scope="col">Potongan PPh 21</th>
-                        <th scope="col">Action</th>
+                        <th scope="col">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>

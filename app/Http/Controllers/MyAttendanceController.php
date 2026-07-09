@@ -15,7 +15,7 @@ class MyAttendanceController extends Controller
             return back()->withError('Akun Anda tidak tertaut dengan data Karyawan.');
         }
 
-        $attendances = $employee->attendanceRecords()->latest('record_date')->latest('id')->get();
+        $attendances = $employee->attendanceRecords()->latest()->get();
         $todayAttendance = $employee->attendanceRecords()->where('record_date', now()->format('Y-m-d'))->first();
 
         return view('my-attendance.index', [
@@ -35,14 +35,18 @@ class MyAttendanceController extends Controller
             return back()->withError('Anda sudah melakukan absensi hari ini.');
         }
 
-        \App\Models\AttendanceRecord::create([
-            'employee_id' => $employee->id,
-            'record_date' => $today,
-            'check_in' => now()->format('H:i'),
-            'status' => 'Hadir'
-        ]);
+        try {
+            \App\Models\AttendanceRecord::create([
+                'employee_id' => $employee->id,
+                'record_date' => $today,
+                'check_in' => now()->format('H:i'),
+                'status' => 'Hadir'
+            ]);
 
-        return back()->with('success', 'Berhasil Check-In pada ' . now()->format('H:i'));
+            return back()->with('success', 'Berhasil Check-In pada ' . now()->format('H:i'));
+        } catch (\Exception $e) {
+            return back()->with('error', 'Gagal Check-In: ' . $e->getMessage());
+        }
     }
 
     public function checkOut(Request $request)
@@ -62,18 +66,25 @@ class MyAttendanceController extends Controller
         }
 
         $checkOutTime = now();
-        $limit = \Carbon\Carbon::createFromFormat('H:i', '17:00');
+        $recordDate = $attendance->record_date->format('Y-m-d');
+        $limit = \Carbon\Carbon::createFromFormat('Y-m-d H:i', $recordDate . ' 17:00');
+        
         $overtimeHours = 0;
         
         if ($checkOutTime->greaterThan($limit)) {
-            $overtimeHours = $checkOutTime->diffInHours($limit);
+            $minutes = $limit->diffInMinutes($checkOutTime);
+            $overtimeHours = (int) ceil($minutes / 60);
         }
 
-        $attendance->update([
-            'check_out' => $checkOutTime->format('H:i'),
-            'overtime_hours' => $overtimeHours
-        ]);
+        try {
+            $attendance->update([
+                'check_out' => $checkOutTime->format('H:i'),
+                'overtime_hours' => $overtimeHours
+            ]);
 
-        return back()->with('success', 'Berhasil Check-Out pada ' . $checkOutTime->format('H:i'));
+            return back()->with('success', 'Berhasil Check-Out pada ' . $checkOutTime->format('H:i'));
+        } catch (\Exception $e) {
+            return back()->with('error', 'Gagal Check-Out: ' . $e->getMessage());
+        }
     }
 }

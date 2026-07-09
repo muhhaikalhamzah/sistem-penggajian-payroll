@@ -14,11 +14,30 @@
                 </select>
                 @error('employee_id') <div class="invalid-feedback">{{ $message }}</div> @enderror
             </div>
-            <div class="mb-3">
-                <label for="record_date" class="form-label required">Tanggal</label>
-                <input class="form-control @error('record_date') is-invalid @enderror" type="date" id="record_date"
-                    name="record_date" required value="{{ old('record_date', $attendance->record_date->format('Y-m-d')) }}">
-                @error('record_date') <div class="invalid-feedback">{{ $message }}</div> @enderror
+            @php
+                $calculatedCheckOutDate = $attendance->record_date->format('Y-m-d');
+                if ($attendance->check_in && $attendance->check_out && $attendance->overtime_hours > 0) {
+                    $co = substr($attendance->check_out, 0, 5);
+                    $ci = substr($attendance->check_in, 0, 5);
+                    if (strcmp($co, '17:00') <= 0 || strcmp($co, $ci) <= 0) {
+                        $calculatedCheckOutDate = $attendance->record_date->copy()->addDay()->format('Y-m-d');
+                    }
+                }
+            @endphp
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="record_date" class="form-label required">Tanggal Masuk</label>
+                    <input class="form-control @error('record_date') is-invalid @enderror" type="date" id="record_date"
+                        name="record_date" required value="{{ old('record_date', $attendance->record_date->format('Y-m-d')) }}">
+                    @error('record_date') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="check_out_date" class="form-label">Tanggal Keluar</label>
+                    <input class="form-control @error('check_out_date') is-invalid @enderror" type="date" id="check_out_date"
+                        name="check_out_date" value="{{ old('check_out_date', $calculatedCheckOutDate) }}">
+                    <small class="text-muted">Isi jika pulang di hari berikutnya (lembur lintas hari)</small>
+                    @error('check_out_date') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                </div>
             </div>
             
             <div class="row">

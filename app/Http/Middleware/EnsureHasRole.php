@@ -26,6 +26,6 @@ class EnsureHasRole
             }
         }
 
-        abort(401);
+        abort(403, 'Anda tidak memiliki akses ke halaman ini.');
     }
 }

@@ -13,7 +13,7 @@
                         <th scope="col">Nama Potongan</th>
                         <th scope="col">Tipe</th>
                         <th scope="col">Jumlah (Rp)</th>
-                        <th scope="col">Action</th>
+                        <th scope="col">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>

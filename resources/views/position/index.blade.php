@@ -12,7 +12,7 @@
                         <th scope="col">Nama Jabatan</th>
                         <th scope="col">Gaji Min</th>
                         <th scope="col">Gaji Max</th>
-                        <th scope="col">Action</th>
+                        <th scope="col">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>

@@ -15,7 +15,7 @@
                         <th scope="col">Keluar</th>
                         <th scope="col">Jam Lembur</th>
                         <th scope="col">Status</th>
-                        <th scope="col">Action</th>
+                        <th scope="col">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -24,8 +24,8 @@
                             <td>{{ $loop->iteration }}</td>
                             <td>{{ $att->record_date->format('d M Y') }}</td>
                             <td>{{ $att->employee->first_name }} {{ $att->employee->last_name }} <br><small class="text-muted">{{ $att->employee->employee_number }}</small></td>
-                            <td>{{ $att->check_in ? date('H:i', strtotime($att->check_in)) : '-' }}</td>
-                            <td>{{ $att->check_out ? date('H:i', strtotime($att->check_out)) : '-' }}</td>
+                            <td>{{ $att->check_in ? substr($att->check_in, 0, 5) : '-' }}</td>
+                            <td>{{ $att->check_out ? substr($att->check_out, 0, 5) : '-' }}</td>
                             <td>
                                 @if($att->overtime_hours > 0)
                                     <span class="badge bg-warning">{{ $att->overtime_hours }} Jam</span>

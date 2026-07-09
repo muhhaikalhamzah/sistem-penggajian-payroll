@@ -99,6 +99,20 @@
     </div>
     @endif
 
+    @if(!empty($payslipChartData))
+    <div class="card shadow-sm border-0 mb-4">
+        <div class="card-header bg-white border-bottom">
+            <h5 class="mb-0 fw-bold">
+                <i class='bx bx-line-chart me-2 text-primary'></i>
+                Riwayat Gaji (Trend)
+            </h5>
+        </div>
+        <div class="card-body">
+            <canvas id="payslipChart" style="max-height: 300px;"></canvas>
+        </div>
+    </div>
+    @endif
+
     <!-- Quick Actions -->
     <div class="card shadow-sm border-0 mb-4">
         <div class="card-header bg-white border-bottom">
@@ -143,16 +157,18 @@
                         </div>
                     </a>
                 </div>
+                @if(in_array(Auth::user()->role, ['Superadmin', 'Admin']))
                 <div class="col-md-3">
                     <a href="{{ route('dashboard.edit') }}" class="text-decoration-none">
                         <div class="card border border-warning border-opacity-25 h-100 hover-shadow">
-                            <div class="card-body text-center mt-4"">
+                            <div class="card-body text-center mt-4">
                                 <i class='bx bx-edit fs-1 text-warning mb-2'></i>
                                 <h6 class=" mb-0">Edit Profil</h6>
                             </div>
                         </div>
                     </a>
                 </div>
+                @endif
             </div>
         </div>
     </div>
@@ -219,6 +235,36 @@
     @endpush
 
     @push('scripts')
+    @if(!empty($payslipChartData))
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const chartData = {!! $payslipChartData !!};
+            new Chart(document.querySelector('#payslipChart'), {
+                type: 'line',
+                data: {
+                    labels: chartData.labels,
+                    datasets: [{
+                        label: 'Gaji Bersih (Take Home Pay)',
+                        data: chartData.data,
+                        fill: true,
+                        borderColor: 'rgb(75, 192, 192)',
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        tension: 0.1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+    @endif
     @endpush
 
 </x-app>

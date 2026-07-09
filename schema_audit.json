@@ -1,0 +1,1603 @@
+{
+    "allowances": {
+        "count": 9,
+        "columns": [
+            {
+                "Field": "id",
+                "Type": "bigint unsigned",
+                "Null": "NO",
+                "Key": "PRI",
+                "Default": null,
+                "Extra": "auto_increment"
+            },
+            {
+                "Field": "employee_id",
+                "Type": "bigint unsigned",
+                "Null": "NO",
+                "Key": "MUL",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "name",
+                "Type": "varchar(255)",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "amount",
+                "Type": "decimal(15,2)",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "type",
+                "Type": "enum('Tetap','Variabel')",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "created_at",
+                "Type": "timestamp",
+                "Null": "YES",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "updated_at",
+                "Type": "timestamp",
+                "Null": "YES",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            }
+        ],
+        "keys": [
+            {
+                "Table": "allowances",
+                "Non_unique": 0,
+                "Key_name": "PRIMARY",
+                "Seq_in_index": 1,
+                "Column_name": "id",
+                "Collation": "A",
+                "Cardinality": 0,
+                "Sub_part": null,
+                "Packed": null,
+                "Null": "",
+                "Index_type": "BTREE",
+                "Comment": "",
+                "Index_comment": "",
+                "Visible": "YES",
+                "Expression": null
+            },
+            {
+                "Table": "allowances",
+                "Non_unique": 1,
+                "Key_name": "allowances_employee_id_foreign",
+                "Seq_in_index": 1,
+                "Column_name": "employee_id",
+                "Collation": "A",
+                "Cardinality": 0,
+                "Sub_part": null,
+                "Packed": null,
+                "Null": "",
+                "Index_type": "BTREE",
+                "Comment": "",
+                "Index_comment": "",
+                "Visible": "YES",
+                "Expression": null
+            }
+        ],
+        "foreign_keys": [
+            {
+                "COLUMN_NAME": "employee_id",
+                "REFERENCED_TABLE_NAME": "employees",
+                "REFERENCED_COLUMN_NAME": "id"
+            }
+        ]
+    },
+    "attendance_records": {
+        "count": 810,
+        "columns": [
+            {
+                "Field": "id",
+                "Type": "bigint unsigned",
+                "Null": "NO",
+                "Key": "PRI",
+                "Default": null,
+                "Extra": "auto_increment"
+            },
+            {
+                "Field": "employee_id",
+                "Type": "bigint unsigned",
+                "Null": "NO",
+                "Key": "MUL",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "record_date",
+                "Type": "date",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "check_in",
+                "Type": "time",
+                "Null": "YES",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "check_out",
+                "Type": "time",
+                "Null": "YES",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "overtime_hours",
+                "Type": "int",
+                "Null": "NO",
+                "Key": "",
+                "Default": "0",
+                "Extra": ""
+            },
+            {
+                "Field": "status",
+                "Type": "enum('Hadir','Alpa','Cuti')",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "created_at",
+                "Type": "timestamp",
+                "Null": "YES",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "updated_at",
+                "Type": "timestamp",
+                "Null": "YES",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            }
+        ],
+        "keys": [
+            {
+                "Table": "attendance_records",
+                "Non_unique": 0,
+                "Key_name": "PRIMARY",
+                "Seq_in_index": 1,
+                "Column_name": "id",
+                "Collation": "A",
+                "Cardinality": 0,
+                "Sub_part": null,
+                "Packed": null,
+                "Null": "",
+                "Index_type": "BTREE",
+                "Comment": "",
+                "Index_comment": "",
+                "Visible": "YES",
+                "Expression": null
+            },
+            {
+                "Table": "attendance_records",
+                "Non_unique": 0,
+                "Key_name": "attendance_records_employee_id_record_date_unique",
+                "Seq_in_index": 1,
+                "Column_name": "employee_id",
+                "Collation": "A",
+                "Cardinality": 0,
+                "Sub_part": null,
+                "Packed": null,
+                "Null": "",
+                "Index_type": "BTREE",
+                "Comment": "",
+                "Index_comment": "",
+                "Visible": "YES",
+                "Expression": null
+            },
+            {
+                "Table": "attendance_records",
+                "Non_unique": 0,
+                "Key_name": "attendance_records_employee_id_record_date_unique",
+                "Seq_in_index": 2,
+                "Column_name": "record_date",
+                "Collation": "A",
+                "Cardinality": 0,
+                "Sub_part": null,
+                "Packed": null,
+                "Null": "",
+                "Index_type": "BTREE",
+                "Comment": "",
+                "Index_comment": "",
+                "Visible": "YES",
+                "Expression": null
+            }
+        ],
+        "foreign_keys": [
+            {
+                "COLUMN_NAME": "employee_id",
+                "REFERENCED_TABLE_NAME": "employees",
+                "REFERENCED_COLUMN_NAME": "id"
+            }
+        ]
+    },
+    "deductions": {
+        "count": 6,
+        "columns": [
+            {
+                "Field": "id",
+                "Type": "bigint unsigned",
+                "Null": "NO",
+                "Key": "PRI",
+                "Default": null,
+                "Extra": "auto_increment"
+            },
+            {
+                "Field": "employee_id",
+                "Type": "bigint unsigned",
+                "Null": "NO",
+                "Key": "MUL",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "name",
+                "Type": "varchar(255)",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "amount",
+                "Type": "decimal(15,2)",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "type",
+                "Type": "enum('Tetap','Variabel')",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "created_at",
+                "Type": "timestamp",
+                "Null": "YES",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "updated_at",
+                "Type": "timestamp",
+                "Null": "YES",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            }
+        ],
+        "keys": [
+            {
+                "Table": "deductions",
+                "Non_unique": 0,
+                "Key_name": "PRIMARY",
+                "Seq_in_index": 1,
+                "Column_name": "id",
+                "Collation": "A",
+                "Cardinality": 0,
+                "Sub_part": null,
+                "Packed": null,
+                "Null": "",
+                "Index_type": "BTREE",
+                "Comment": "",
+                "Index_comment": "",
+                "Visible": "YES",
+                "Expression": null
+            },
+            {
+                "Table": "deductions",
+                "Non_unique": 1,
+                "Key_name": "deductions_employee_id_foreign",
+                "Seq_in_index": 1,
+                "Column_name": "employee_id",
+                "Collation": "A",
+                "Cardinality": 0,
+                "Sub_part": null,
+                "Packed": null,
+                "Null": "",
+                "Index_type": "BTREE",
+                "Comment": "",
+                "Index_comment": "",
+                "Visible": "YES",
+                "Expression": null
+            }
+        ],
+        "foreign_keys": [
+            {
+                "COLUMN_NAME": "employee_id",
+                "REFERENCED_TABLE_NAME": "employees",
+                "REFERENCED_COLUMN_NAME": "id"
+            }
+        ]
+    },
+    "departments": {
+        "count": 5,
+        "columns": [
+            {
+                "Field": "id",
+                "Type": "bigint unsigned",
+                "Null": "NO",
+                "Key": "PRI",
+                "Default": null,
+                "Extra": "auto_increment"
+            },
+            {
+                "Field": "name",
+                "Type": "varchar(255)",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "description",
+                "Type": "text",
+                "Null": "YES",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "created_at",
+                "Type": "timestamp",
+                "Null": "YES",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "updated_at",
+                "Type": "timestamp",
+                "Null": "YES",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            }
+        ],
+        "keys": [
+            {
+                "Table": "departments",
+                "Non_unique": 0,
+                "Key_name": "PRIMARY",
+                "Seq_in_index": 1,
+                "Column_name": "id",
+                "Collation": "A",
+                "Cardinality": 0,
+                "Sub_part": null,
+                "Packed": null,
+                "Null": "",
+                "Index_type": "BTREE",
+                "Comment": "",
+                "Index_comment": "",
+                "Visible": "YES",
+                "Expression": null
+            }
+        ],
+        "foreign_keys": []
+    },
+    "employees": {
+        "count": 18,
+        "columns": [
+            {
+                "Field": "id",
+                "Type": "bigint unsigned",
+                "Null": "NO",
+                "Key": "PRI",
+                "Default": null,
+                "Extra": "auto_increment"
+            },
+            {
+                "Field": "employee_number",
+                "Type": "varchar(255)",
+                "Null": "NO",
+                "Key": "UNI",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "first_name",
+                "Type": "varchar(255)",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "last_name",
+                "Type": "varchar(255)",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "ptkp_status",
+                "Type": "varchar(255)",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "join_date",
+                "Type": "date",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "department_id",
+                "Type": "bigint unsigned",
+                "Null": "NO",
+                "Key": "MUL",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "position_id",
+                "Type": "bigint unsigned",
+                "Null": "NO",
+                "Key": "MUL",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "user_id",
+                "Type": "bigint unsigned",
+                "Null": "YES",
+                "Key": "MUL",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "created_at",
+                "Type": "timestamp",
+                "Null": "YES",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "updated_at",
+                "Type": "timestamp",
+                "Null": "YES",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            }
+        ],
+        "keys": [
+            {
+                "Table": "employees",
+                "Non_unique": 0,
+                "Key_name": "PRIMARY",
+                "Seq_in_index": 1,
+                "Column_name": "id",
+                "Collation": "A",
+                "Cardinality": 0,
+                "Sub_part": null,
+                "Packed": null,
+                "Null": "",
+                "Index_type": "BTREE",
+                "Comment": "",
+                "Index_comment": "",
+                "Visible": "YES",
+                "Expression": null
+            },
+            {
+                "Table": "employees",
+                "Non_unique": 0,
+                "Key_name": "employees_employee_number_unique",
+                "Seq_in_index": 1,
+                "Column_name": "employee_number",
+                "Collation": "A",
+                "Cardinality": 0,
+                "Sub_part": null,
+                "Packed": null,
+                "Null": "",
+                "Index_type": "BTREE",
+                "Comment": "",
+                "Index_comment": "",
+                "Visible": "YES",
+                "Expression": null
+            },
+            {
+                "Table": "employees",
+                "Non_unique": 1,
+                "Key_name": "employees_department_id_foreign",
+                "Seq_in_index": 1,
+                "Column_name": "department_id",
+                "Collation": "A",
+                "Cardinality": 0,
+                "Sub_part": null,
+                "Packed": null,
+                "Null": "",
+                "Index_type": "BTREE",
+                "Comment": "",
+                "Index_comment": "",
+                "Visible": "YES",
+                "Expression": null
+            },
+            {
+                "Table": "employees",
+                "Non_unique": 1,
+                "Key_name": "employees_position_id_foreign",
+                "Seq_in_index": 1,
+                "Column_name": "position_id",
+                "Collation": "A",
+                "Cardinality": 0,
+                "Sub_part": null,
+                "Packed": null,
+                "Null": "",
+                "Index_type": "BTREE",
+                "Comment": "",
+                "Index_comment": "",
+                "Visible": "YES",
+                "Expression": null
+            },
+            {
+                "Table": "employees",
+                "Non_unique": 1,
+                "Key_name": "employees_user_id_foreign",
+                "Seq_in_index": 1,
+                "Column_name": "user_id",
+                "Collation": "A",
+                "Cardinality": 0,
+                "Sub_part": null,
+                "Packed": null,
+                "Null": "YES",
+                "Index_type": "BTREE",
+                "Comment": "",
+                "Index_comment": "",
+                "Visible": "YES",
+                "Expression": null
+            }
+        ],
+        "foreign_keys": [
+            {
+                "COLUMN_NAME": "department_id",
+                "REFERENCED_TABLE_NAME": "departments",
+                "REFERENCED_COLUMN_NAME": "id"
+            },
+            {
+                "COLUMN_NAME": "position_id",
+                "REFERENCED_TABLE_NAME": "positions",
+                "REFERENCED_COLUMN_NAME": "id"
+            },
+            {
+                "COLUMN_NAME": "user_id",
+                "REFERENCED_TABLE_NAME": "users",
+                "REFERENCED_COLUMN_NAME": "id"
+            }
+        ]
+    },
+    "leave_requests": {
+        "count": 0,
+        "columns": [
+            {
+                "Field": "id",
+                "Type": "bigint unsigned",
+                "Null": "NO",
+                "Key": "PRI",
+                "Default": null,
+                "Extra": "auto_increment"
+            },
+            {
+                "Field": "employee_id",
+                "Type": "bigint unsigned",
+                "Null": "NO",
+                "Key": "MUL",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "start_date",
+                "Type": "date",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "end_date",
+                "Type": "date",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "leave_type",
+                "Type": "enum('Tahunan','Sakit','Lainnya')",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "status",
+                "Type": "enum('Menunggu','Disetujui','Ditolak')",
+                "Null": "NO",
+                "Key": "",
+                "Default": "Menunggu",
+                "Extra": ""
+            },
+            {
+                "Field": "created_at",
+                "Type": "timestamp",
+                "Null": "YES",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "updated_at",
+                "Type": "timestamp",
+                "Null": "YES",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            }
+        ],
+        "keys": [
+            {
+                "Table": "leave_requests",
+                "Non_unique": 0,
+                "Key_name": "PRIMARY",
+                "Seq_in_index": 1,
+                "Column_name": "id",
+                "Collation": "A",
+                "Cardinality": 0,
+                "Sub_part": null,
+                "Packed": null,
+                "Null": "",
+                "Index_type": "BTREE",
+                "Comment": "",
+                "Index_comment": "",
+                "Visible": "YES",
+                "Expression": null
+            },
+            {
+                "Table": "leave_requests",
+                "Non_unique": 1,
+                "Key_name": "leave_requests_employee_id_foreign",
+                "Seq_in_index": 1,
+                "Column_name": "employee_id",
+                "Collation": "A",
+                "Cardinality": 0,
+                "Sub_part": null,
+                "Packed": null,
+                "Null": "",
+                "Index_type": "BTREE",
+                "Comment": "",
+                "Index_comment": "",
+                "Visible": "YES",
+                "Expression": null
+            }
+        ],
+        "foreign_keys": [
+            {
+                "COLUMN_NAME": "employee_id",
+                "REFERENCED_TABLE_NAME": "employees",
+                "REFERENCED_COLUMN_NAME": "id"
+            }
+        ]
+    },
+    "notifications": {
+        "count": 0,
+        "columns": [
+            {
+                "Field": "id",
+                "Type": "char(36)",
+                "Null": "NO",
+                "Key": "PRI",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "type",
+                "Type": "varchar(255)",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "notifiable_type",
+                "Type": "varchar(255)",
+                "Null": "NO",
+                "Key": "MUL",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "notifiable_id",
+                "Type": "bigint unsigned",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "data",
+                "Type": "text",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "read_at",
+                "Type": "timestamp",
+                "Null": "YES",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "created_at",
+                "Type": "timestamp",
+                "Null": "YES",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "updated_at",
+                "Type": "timestamp",
+                "Null": "YES",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            }
+        ],
+        "keys": [
+            {
+                "Table": "notifications",
+                "Non_unique": 0,
+                "Key_name": "PRIMARY",
+                "Seq_in_index": 1,
+                "Column_name": "id",
+                "Collation": "A",
+                "Cardinality": 0,
+                "Sub_part": null,
+                "Packed": null,
+                "Null": "",
+                "Index_type": "BTREE",
+                "Comment": "",
+                "Index_comment": "",
+                "Visible": "YES",
+                "Expression": null
+            },
+            {
+                "Table": "notifications",
+                "Non_unique": 1,
+                "Key_name": "notifications_notifiable_type_notifiable_id_index",
+                "Seq_in_index": 1,
+                "Column_name": "notifiable_type",
+                "Collation": "A",
+                "Cardinality": 0,
+                "Sub_part": null,
+                "Packed": null,
+                "Null": "",
+                "Index_type": "BTREE",
+                "Comment": "",
+                "Index_comment": "",
+                "Visible": "YES",
+                "Expression": null
+            },
+            {
+                "Table": "notifications",
+                "Non_unique": 1,
+                "Key_name": "notifications_notifiable_type_notifiable_id_index",
+                "Seq_in_index": 2,
+                "Column_name": "notifiable_id",
+                "Collation": "A",
+                "Cardinality": 0,
+                "Sub_part": null,
+                "Packed": null,
+                "Null": "",
+                "Index_type": "BTREE",
+                "Comment": "",
+                "Index_comment": "",
+                "Visible": "YES",
+                "Expression": null
+            }
+        ],
+        "foreign_keys": []
+    },
+    "payslips": {
+        "count": 36,
+        "columns": [
+            {
+                "Field": "id",
+                "Type": "bigint unsigned",
+                "Null": "NO",
+                "Key": "PRI",
+                "Default": null,
+                "Extra": "auto_increment"
+            },
+            {
+                "Field": "employee_id",
+                "Type": "bigint unsigned",
+                "Null": "NO",
+                "Key": "MUL",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "period",
+                "Type": "varchar(255)",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "basic_salary",
+                "Type": "decimal(15,2)",
+                "Null": "NO",
+                "Key": "",
+                "Default": "0.00",
+                "Extra": ""
+            },
+            {
+                "Field": "allowance_total",
+                "Type": "decimal(15,2)",
+                "Null": "NO",
+                "Key": "",
+                "Default": "0.00",
+                "Extra": ""
+            },
+            {
+                "Field": "deduction_total",
+                "Type": "decimal(15,2)",
+                "Null": "NO",
+                "Key": "",
+                "Default": "0.00",
+                "Extra": ""
+            },
+            {
+                "Field": "pph21_tax",
+                "Type": "decimal(15,2)",
+                "Null": "NO",
+                "Key": "",
+                "Default": "0.00",
+                "Extra": ""
+            },
+            {
+                "Field": "bpjs_fee",
+                "Type": "decimal(15,2)",
+                "Null": "NO",
+                "Key": "",
+                "Default": "0.00",
+                "Extra": ""
+            },
+            {
+                "Field": "net_salary",
+                "Type": "decimal(15,2)",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "status",
+                "Type": "enum('draft','approved','paid')",
+                "Null": "NO",
+                "Key": "",
+                "Default": "draft",
+                "Extra": ""
+            },
+            {
+                "Field": "payment_date",
+                "Type": "date",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "created_at",
+                "Type": "timestamp",
+                "Null": "YES",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "updated_at",
+                "Type": "timestamp",
+                "Null": "YES",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            }
+        ],
+        "keys": [
+            {
+                "Table": "payslips",
+                "Non_unique": 0,
+                "Key_name": "PRIMARY",
+                "Seq_in_index": 1,
+                "Column_name": "id",
+                "Collation": "A",
+                "Cardinality": 0,
+                "Sub_part": null,
+                "Packed": null,
+                "Null": "",
+                "Index_type": "BTREE",
+                "Comment": "",
+                "Index_comment": "",
+                "Visible": "YES",
+                "Expression": null
+            },
+            {
+                "Table": "payslips",
+                "Non_unique": 0,
+                "Key_name": "payslips_emp_period_unique",
+                "Seq_in_index": 1,
+                "Column_name": "employee_id",
+                "Collation": "A",
+                "Cardinality": 1,
+                "Sub_part": null,
+                "Packed": null,
+                "Null": "",
+                "Index_type": "BTREE",
+                "Comment": "",
+                "Index_comment": "",
+                "Visible": "YES",
+                "Expression": null
+            },
+            {
+                "Table": "payslips",
+                "Non_unique": 0,
+                "Key_name": "payslips_emp_period_unique",
+                "Seq_in_index": 2,
+                "Column_name": "period",
+                "Collation": "A",
+                "Cardinality": 1,
+                "Sub_part": null,
+                "Packed": null,
+                "Null": "",
+                "Index_type": "BTREE",
+                "Comment": "",
+                "Index_comment": "",
+                "Visible": "YES",
+                "Expression": null
+            }
+        ],
+        "foreign_keys": [
+            {
+                "COLUMN_NAME": "employee_id",
+                "REFERENCED_TABLE_NAME": "employees",
+                "REFERENCED_COLUMN_NAME": "id"
+            }
+        ]
+    },
+    "positions": {
+        "count": 3,
+        "columns": [
+            {
+                "Field": "id",
+                "Type": "bigint unsigned",
+                "Null": "NO",
+                "Key": "PRI",
+                "Default": null,
+                "Extra": "auto_increment"
+            },
+            {
+                "Field": "title",
+                "Type": "varchar(255)",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "min_salary",
+                "Type": "decimal(15,2)",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "max_salary",
+                "Type": "decimal(15,2)",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "created_at",
+                "Type": "timestamp",
+                "Null": "YES",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "updated_at",
+                "Type": "timestamp",
+                "Null": "YES",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            }
+        ],
+        "keys": [
+            {
+                "Table": "positions",
+                "Non_unique": 0,
+                "Key_name": "PRIMARY",
+                "Seq_in_index": 1,
+                "Column_name": "id",
+                "Collation": "A",
+                "Cardinality": 0,
+                "Sub_part": null,
+                "Packed": null,
+                "Null": "",
+                "Index_type": "BTREE",
+                "Comment": "",
+                "Index_comment": "",
+                "Visible": "YES",
+                "Expression": null
+            }
+        ],
+        "foreign_keys": []
+    },
+    "salary_structures": {
+        "count": 18,
+        "columns": [
+            {
+                "Field": "id",
+                "Type": "bigint unsigned",
+                "Null": "NO",
+                "Key": "PRI",
+                "Default": null,
+                "Extra": "auto_increment"
+            },
+            {
+                "Field": "employee_id",
+                "Type": "bigint unsigned",
+                "Null": "NO",
+                "Key": "MUL",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "basic_salary",
+                "Type": "decimal(15,2)",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "effective_date",
+                "Type": "date",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "created_at",
+                "Type": "timestamp",
+                "Null": "YES",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "updated_at",
+                "Type": "timestamp",
+                "Null": "YES",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            }
+        ],
+        "keys": [
+            {
+                "Table": "salary_structures",
+                "Non_unique": 0,
+                "Key_name": "PRIMARY",
+                "Seq_in_index": 1,
+                "Column_name": "id",
+                "Collation": "A",
+                "Cardinality": 0,
+                "Sub_part": null,
+                "Packed": null,
+                "Null": "",
+                "Index_type": "BTREE",
+                "Comment": "",
+                "Index_comment": "",
+                "Visible": "YES",
+                "Expression": null
+            },
+            {
+                "Table": "salary_structures",
+                "Non_unique": 0,
+                "Key_name": "salary_structures_employee_id_effective_date_unique",
+                "Seq_in_index": 1,
+                "Column_name": "employee_id",
+                "Collation": "A",
+                "Cardinality": 0,
+                "Sub_part": null,
+                "Packed": null,
+                "Null": "",
+                "Index_type": "BTREE",
+                "Comment": "",
+                "Index_comment": "",
+                "Visible": "YES",
+                "Expression": null
+            },
+            {
+                "Table": "salary_structures",
+                "Non_unique": 0,
+                "Key_name": "salary_structures_employee_id_effective_date_unique",
+                "Seq_in_index": 2,
+                "Column_name": "effective_date",
+                "Collation": "A",
+                "Cardinality": 0,
+                "Sub_part": null,
+                "Packed": null,
+                "Null": "",
+                "Index_type": "BTREE",
+                "Comment": "",
+                "Index_comment": "",
+                "Visible": "YES",
+                "Expression": null
+            }
+        ],
+        "foreign_keys": [
+            {
+                "COLUMN_NAME": "employee_id",
+                "REFERENCED_TABLE_NAME": "employees",
+                "REFERENCED_COLUMN_NAME": "id"
+            }
+        ]
+    },
+    "settings": {
+        "count": 1,
+        "columns": [
+            {
+                "Field": "id",
+                "Type": "bigint unsigned",
+                "Null": "NO",
+                "Key": "PRI",
+                "Default": null,
+                "Extra": "auto_increment"
+            },
+            {
+                "Field": "app_name",
+                "Type": "varchar(255)",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "copyright",
+                "Type": "varchar(255)",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "login_title",
+                "Type": "varchar(255)",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "keywords",
+                "Type": "varchar(255)",
+                "Null": "YES",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "description",
+                "Type": "varchar(255)",
+                "Null": "YES",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "logo",
+                "Type": "varchar(255)",
+                "Null": "YES",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "created_at",
+                "Type": "timestamp",
+                "Null": "YES",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "updated_at",
+                "Type": "timestamp",
+                "Null": "YES",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            }
+        ],
+        "keys": [
+            {
+                "Table": "settings",
+                "Non_unique": 0,
+                "Key_name": "PRIMARY",
+                "Seq_in_index": 1,
+                "Column_name": "id",
+                "Collation": "A",
+                "Cardinality": 1,
+                "Sub_part": null,
+                "Packed": null,
+                "Null": "",
+                "Index_type": "BTREE",
+                "Comment": "",
+                "Index_comment": "",
+                "Visible": "YES",
+                "Expression": null
+            }
+        ],
+        "foreign_keys": []
+    },
+    "tax_configs": {
+        "count": 3,
+        "columns": [
+            {
+                "Field": "id",
+                "Type": "bigint unsigned",
+                "Null": "NO",
+                "Key": "PRI",
+                "Default": null,
+                "Extra": "auto_increment"
+            },
+            {
+                "Field": "name",
+                "Type": "varchar(255)",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "rate_percentage",
+                "Type": "decimal(5,2)",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "is_active",
+                "Type": "tinyint(1)",
+                "Null": "NO",
+                "Key": "",
+                "Default": "1",
+                "Extra": ""
+            },
+            {
+                "Field": "created_at",
+                "Type": "timestamp",
+                "Null": "YES",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "updated_at",
+                "Type": "timestamp",
+                "Null": "YES",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            }
+        ],
+        "keys": [
+            {
+                "Table": "tax_configs",
+                "Non_unique": 0,
+                "Key_name": "PRIMARY",
+                "Seq_in_index": 1,
+                "Column_name": "id",
+                "Collation": "A",
+                "Cardinality": 2,
+                "Sub_part": null,
+                "Packed": null,
+                "Null": "",
+                "Index_type": "BTREE",
+                "Comment": "",
+                "Index_comment": "",
+                "Visible": "YES",
+                "Expression": null
+            }
+        ],
+        "foreign_keys": []
+    },
+    "tax_records": {
+        "count": 36,
+        "columns": [
+            {
+                "Field": "id",
+                "Type": "bigint unsigned",
+                "Null": "NO",
+                "Key": "PRI",
+                "Default": null,
+                "Extra": "auto_increment"
+            },
+            {
+                "Field": "employee_id",
+                "Type": "bigint unsigned",
+                "Null": "NO",
+                "Key": "MUL",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "taxable_income",
+                "Type": "decimal(15,2)",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "pph21_amount",
+                "Type": "decimal(15,2)",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "period",
+                "Type": "varchar(255)",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "created_at",
+                "Type": "timestamp",
+                "Null": "YES",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "updated_at",
+                "Type": "timestamp",
+                "Null": "YES",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            }
+        ],
+        "keys": [
+            {
+                "Table": "tax_records",
+                "Non_unique": 0,
+                "Key_name": "PRIMARY",
+                "Seq_in_index": 1,
+                "Column_name": "id",
+                "Collation": "A",
+                "Cardinality": 0,
+                "Sub_part": null,
+                "Packed": null,
+                "Null": "",
+                "Index_type": "BTREE",
+                "Comment": "",
+                "Index_comment": "",
+                "Visible": "YES",
+                "Expression": null
+            },
+            {
+                "Table": "tax_records",
+                "Non_unique": 1,
+                "Key_name": "tax_records_employee_id_foreign",
+                "Seq_in_index": 1,
+                "Column_name": "employee_id",
+                "Collation": "A",
+                "Cardinality": 0,
+                "Sub_part": null,
+                "Packed": null,
+                "Null": "",
+                "Index_type": "BTREE",
+                "Comment": "",
+                "Index_comment": "",
+                "Visible": "YES",
+                "Expression": null
+            }
+        ],
+        "foreign_keys": [
+            {
+                "COLUMN_NAME": "employee_id",
+                "REFERENCED_TABLE_NAME": "employees",
+                "REFERENCED_COLUMN_NAME": "id"
+            }
+        ]
+    },
+    "users": {
+        "count": 14,
+        "columns": [
+            {
+                "Field": "id",
+                "Type": "bigint unsigned",
+                "Null": "NO",
+                "Key": "PRI",
+                "Default": null,
+                "Extra": "auto_increment"
+            },
+            {
+                "Field": "name",
+                "Type": "varchar(255)",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "email",
+                "Type": "varchar(255)",
+                "Null": "NO",
+                "Key": "UNI",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "phone",
+                "Type": "varchar(20)",
+                "Null": "YES",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "email_verified_at",
+                "Type": "timestamp",
+                "Null": "YES",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "password",
+                "Type": "varchar(255)",
+                "Null": "NO",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "avatar",
+                "Type": "varchar(255)",
+                "Null": "YES",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "role",
+                "Type": "enum('Superadmin','Admin','hr','finance','employee')",
+                "Null": "NO",
+                "Key": "",
+                "Default": "employee",
+                "Extra": ""
+            },
+            {
+                "Field": "remember_token",
+                "Type": "varchar(100)",
+                "Null": "YES",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "created_at",
+                "Type": "timestamp",
+                "Null": "YES",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            },
+            {
+                "Field": "updated_at",
+                "Type": "timestamp",
+                "Null": "YES",
+                "Key": "",
+                "Default": null,
+                "Extra": ""
+            }
+        ],
+        "keys": [
+            {
+                "Table": "users",
+                "Non_unique": 0,
+                "Key_name": "PRIMARY",
+                "Seq_in_index": 1,
+                "Column_name": "id",
+                "Collation": "A",
+                "Cardinality": 9,
+                "Sub_part": null,
+                "Packed": null,
+                "Null": "",
+                "Index_type": "BTREE",
+                "Comment": "",
+                "Index_comment": "",
+                "Visible": "YES",
+                "Expression": null
+            },
+            {
+                "Table": "users",
+                "Non_unique": 0,
+                "Key_name": "users_email_unique",
+                "Seq_in_index": 1,
+                "Column_name": "email",
+                "Collation": "A",
+                "Cardinality": 9,
+                "Sub_part": null,
+                "Packed": null,
+                "Null": "",
+                "Index_type": "BTREE",
+                "Comment": "",
+                "Index_comment": "",
+                "Visible": "YES",
+                "Expression": null
+            }
+        ],
+        "foreign_keys": []
+    }
+}

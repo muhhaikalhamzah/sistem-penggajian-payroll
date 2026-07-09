@@ -40,8 +40,8 @@
                         <tr>
                             <td>{{ $loop->iteration }}</td>
                             <td>{{ $att->record_date->format('d M Y') }}</td>
-                            <td>{{ $att->check_in ? date('H:i', strtotime($att->check_in)) : '-' }}</td>
-                            <td>{{ $att->check_out ? date('H:i', strtotime($att->check_out)) : '-' }}</td>
+                            <td>{{ $att->check_in ? substr($att->check_in, 0, 5) : '-' }}</td>
+                            <td>{{ $att->check_out ? substr($att->check_out, 0, 5) : '-' }}</td>
                             <td>
                                 @if($att->overtime_hours > 0)
                                     <span class="badge bg-warning text-dark">{{ $att->overtime_hours }} Jam</span>

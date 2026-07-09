@@ -16,7 +16,7 @@
                         <th scope="col">Mulai</th>
                         <th scope="col">Selesai</th>
                         <th scope="col">Status</th>
-                        <th scope="col">Action</th>
+                        <th scope="col">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>

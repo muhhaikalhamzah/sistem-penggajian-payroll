@@ -5,15 +5,29 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Payslip;
 use App\Models\Employee;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
+use App\Services\PayrollCalculatorService;
+use App\Notifications\DraftPayslipNotification;
+use App\Notifications\PayslipApprovedNotification;
+use Illuminate\Support\Facades\Notification;
+use App\Services\FonnteService;
 
 class PayslipController extends Controller
 {
     public function index(Request $request)
     {
+        Gate::authorize('viewAny', Payslip::class);
+        
         $user = Auth::user();
-        if (in_array($user->role, ['finance', 'hr', 'Superadmin', 'Admin'])) {
+        if (in_array(strtolower($user->role), ['superadmin', 'admin', 'finance'])) {
             $payslips = Payslip::with('employee.user')->latest()->get();
+        } else if (strtolower($user->role) === 'hr') {
+            $payslips = Payslip::with('employee.user')->whereHas('employee.user', function($q) {
+                $q->whereIn('role', ['employee', 'finance']);
+            })->latest()->get();
         } else {
             $employee = $user->employee;
             if (!$employee) {
@@ -42,112 +56,53 @@ class PayslipController extends Controller
             'period' => 'required|string', // e.g. 10-2023
         ]);
 
-        $period = $request->period;
-        $employees = Employee::with(['salaryStructures', 'allowances', 'deductions'])->get();
+        try {
+            DB::beginTransaction();
+
+            $period = $request->period;
+            $employees = Employee::with(['salaryStructures', 'allowances', 'deductions'])->get();
 
         $generatedCount = 0;
-        $workingDays = config('payroll.working_days_per_month', 22);
+        $calculator = new PayrollCalculatorService();
 
         foreach ($employees as $emp) {
-
-
-            $basicSalary = $emp->salaryStructures->sortByDesc('effective_date')->first()->basic_salary ?? 0;
-            $totalAllowances = $emp->allowances->sum('amount');
-            // Calculate Alpha & Overtime
             $parts = explode('-', $period);
-            $alphaCount = 0;
-            $overtimeHours = 0;
-            if(count($parts) == 2) {
-                $dbMonth = $parts[0];
-                $dbYear = $parts[1];
-                $alphaCount = \App\Models\AttendanceRecord::where('employee_id', $emp->id)
-                    ->whereMonth('record_date', $dbMonth)
-                    ->whereYear('record_date', $dbYear)
-                    ->where('status', 'Alpa')
-                    ->count();
-                    
-                $overtimeHours = \App\Models\AttendanceRecord::where('employee_id', $emp->id)
-                    ->whereMonth('record_date', $dbMonth)
-                    ->whereYear('record_date', $dbYear)
-                    ->sum('overtime_hours');
-            }
-            $alphaDeduction = ($basicSalary / $workingDays) * $alphaCount;
-            $overtimePay = ($basicSalary / 173) * $overtimeHours;
+            if (count($parts) !== 2) continue;
             
-            $grossSalary = $basicSalary + $totalAllowances + $overtimePay;
+            $month = $parts[0];
+            $year = $parts[1];
             
-            $baseDeductions = $emp->deductions->sum('amount') + $alphaDeduction;
-
-            // Calculate PPh21
-            $biayaJabatan = $grossSalary * 0.05;
-            if ($biayaJabatan > 500000) $biayaJabatan = 500000;
-
-            $nettoBulanan = $grossSalary - $biayaJabatan; // base deduction not subtracted from tax logic usually, but let's keep it simple standard
-            $nettoTahunan = $nettoBulanan * 12;
-
-            $ptkp = 54000000; // default TK/0
-            switch($emp->ptkp_status) {
-                case 'K/0': $ptkp = 58500000; break;
-                case 'K/1': $ptkp = 63000000; break;
-                case 'K/2': $ptkp = 67500000; break;
-                case 'K/3': $ptkp = 72000000; break;
-            }
-
-            $pkpTahunan = $nettoTahunan - $ptkp;
-            if ($pkpTahunan < 0) $pkpTahunan = 0;
-
-            $pph21Tahunan = 0;
-            if ($pkpTahunan > 0) {
-                if ($pkpTahunan <= 60000000) {
-                    $pph21Tahunan = $pkpTahunan * 0.05;
-                } elseif ($pkpTahunan <= 250000000) {
-                    $pph21Tahunan = (60000000 * 0.05) + (($pkpTahunan - 60000000) * 0.15);
-                } elseif ($pkpTahunan <= 500000000) {
-                    $pph21Tahunan = (60000000 * 0.05) + (190000000 * 0.15) + (($pkpTahunan - 250000000) * 0.25);
-                } else {
-                    $pph21Tahunan = (60000000 * 0.05) + (190000000 * 0.15) + (250000000 * 0.25) + (($pkpTahunan - 500000000) * 0.30);
-                }
-            }
-
-            $pph21Bulanan = $pph21Tahunan / 12;
-
-            $taxRecord = \App\Models\TaxRecord::updateOrCreate(
-                ['employee_id' => $emp->id, 'period' => $period],
-                [
-                    'taxable_income' => $pkpTahunan,
-                    'pph21_amount' => $pph21Bulanan,
-                ]
-            );
-
-            $totalDeductions = $baseDeductions + $pph21Bulanan;
-            $netSalary = $grossSalary - $totalDeductions;
-
+            $calc = $calculator->calculate($emp, $month, $year);
+            
             Payslip::updateOrCreate(
                 [
                     'employee_id' => $emp->id,
                     'period' => $period,
                 ],
-                [
-                    'gross_salary' => $grossSalary,
-                    'total_deductions' => $totalDeductions,
-                    'net_salary' => $netSalary,
+                array_merge([
+                    'status' => 'draft',
                     'payment_date' => now()->toDateString(),
-                ]
+                ], $calc)
             );
             $generatedCount++;
         }
 
-        return redirect()->route('payslips.index')->with('success', "Successfully generated {$generatedCount} payslips for period {$period}.");
+            DB::commit();
+
+            // Notify Admin & Superadmin
+            $notifyUsers = User::whereIn(DB::raw('LOWER(role)'), ['superadmin', 'admin'])->get();
+            Notification::send($notifyUsers, new DraftPayslipNotification($period));
+
+            return redirect()->route('payslips.index')->with('success', "Successfully generated {$generatedCount} payslips for period {$period}.");
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->with('error', 'Terjadi kesalahan saat memproses slip gaji: ' . $e->getMessage());
+        }
     }
 
     public function show(Payslip $payslip)
     {
-        $user = Auth::user();
-        if (!in_array($user->role, ['finance', 'hr', 'Superadmin', 'Admin'])) {
-            if (!$user->employee || $payslip->employee_id !== $user->employee->id) {
-                abort(403, 'Unauthorized action.');
-            }
-        }
+        Gate::authorize('view', $payslip);
 
         $payslip->load(['employee.user', 'employee.allowances', 'employee.deductions']);
         
@@ -170,7 +125,7 @@ class PayslipController extends Controller
                 ->whereYear('record_date', $parts[1])
                 ->sum('overtime_hours');
         }
-        $basicSalary = $payslip->employee->salaryStructures->sortByDesc('effective_date')->first()->basic_salary ?? 0;
+        $basicSalary = $payslip->employee?->salaryStructures->sortByDesc('effective_date')->first()?->basic_salary ?? 0;
         $workingDays = config('payroll.working_days_per_month', 22);
         $alphaDeduction = ($basicSalary / $workingDays) * $alphaCount;
         $overtimePay = ($basicSalary / 173) * $overtimeHours;
@@ -188,12 +143,7 @@ class PayslipController extends Controller
 
     public function print(Payslip $payslip)
     {
-        $user = Auth::user();
-        if (!in_array($user->role, ['finance', 'hr', 'Superadmin', 'Admin'])) {
-            if (!$user->employee || $payslip->employee_id !== $user->employee->id) {
-                abort(403, 'Unauthorized action.');
-            }
-        }
+        Gate::authorize('view', $payslip);
 
         $payslip->load(['employee.user', 'employee.allowances', 'employee.deductions']);
         
@@ -216,7 +166,7 @@ class PayslipController extends Controller
                 ->whereYear('record_date', $parts[1])
                 ->sum('overtime_hours');
         }
-        $basicSalary = $payslip->employee->salaryStructures->sortByDesc('effective_date')->first()->basic_salary ?? 0;
+        $basicSalary = $payslip->employee?->salaryStructures->sortByDesc('effective_date')->first()?->basic_salary ?? 0;
         $workingDays = config('payroll.working_days_per_month', 22);
         $alphaDeduction = ($basicSalary / $workingDays) * $alphaCount;
         $overtimePay = ($basicSalary / 173) * $overtimeHours;
@@ -230,5 +180,91 @@ class PayslipController extends Controller
             'overtimeHours' => $overtimeHours,
             'overtimePay' => $overtimePay
         ]);
+    }
+
+    public function approveAll(Request $request)
+    {
+        if (!in_array(strtolower(Auth::user()->role), ['superadmin', 'admin'])) {
+            abort(403, 'Hanya Admin atau Superadmin yang bisa menyetujui slip gaji.');
+        }
+
+        $payslips = Payslip::where('status', 'draft')->with('employee.user')->get();
+        if ($payslips->isEmpty()) {
+            return back()->with('error', 'Tidak ada slip gaji dengan status Draft untuk disetujui.');
+        }
+
+        $fonnte = new FonnteService();
+        $approvedCount = 0;
+
+        foreach ($payslips as $payslip) {
+            $payslip->update(['status' => 'approved']);
+            $approvedCount++;
+
+            if ($payslip->employee && $payslip->employee->user) {
+                $user = $payslip->employee->user;
+                $user->notify(new PayslipApprovedNotification($payslip));
+
+                if (!empty($user->phone)) {
+                    $message = "Halo {$user->name}, Slip Gaji Anda untuk periode {$payslip->period} sudah diterbitkan.\nSilakan login ke sistem untuk melihat rinciannya:\n" . route('payslips.show', $payslip->id);
+                    try {
+                        $fonnte->sendMessage($user->phone, $message);
+                    } catch (\Exception $e) {
+                        // ignore fonnte error to continue approving others
+                    }
+                }
+            }
+        }
+
+        return back()->with('success', "Berhasil menyetujui {$approvedCount} slip gaji secara massal. Notifikasi telah dikirimkan.");
+    }
+
+    public function approve(Payslip $payslip)
+    {
+        // Only superadmin and admin can approve
+        if (!in_array(strtolower(Auth::user()->role), ['superadmin', 'admin'])) {
+            abort(403, 'Hanya Admin atau Superadmin yang bisa menyetujui slip gaji.');
+        }
+
+        if ($payslip->status === 'approved') {
+            return back()->with('error', 'Slip Gaji ini sudah berstatus Approved.');
+        }
+
+        $payslip->update(['status' => 'approved']);
+
+        // Notify Employee via DB Notification
+        if ($payslip->employee && $payslip->employee->user) {
+            $user = $payslip->employee->user;
+            $user->notify(new PayslipApprovedNotification($payslip));
+
+            // Kirim WhatsApp (Fonnte API)
+            if (!empty($user->phone)) {
+                $fonnte = new FonnteService();
+                $message = "Halo {$user->name}, Slip Gaji Anda untuk periode {$payslip->period} sudah diterbitkan.\nSilakan login ke sistem untuk melihat rinciannya:\n" . route('payslips.show', $payslip->id);
+                $fonnte->sendMessage($user->phone, $message);
+            }
+        }
+
+        return back()->with('success', 'Slip Gaji berhasil disetujui (Approved). Notifikasi dikirimkan.');
+    }
+
+    public function verify(Payslip $payslip)
+    {
+        // Check if payslip is valid and approved/paid
+        if (!in_array($payslip->status, ['approved', 'paid'])) {
+            abort(404, 'Slip Gaji tidak ditemukan atau belum disetujui.');
+        }
+
+        $payslip->load(['employee.user']);
+
+        return view('payslip.verify', [
+            'title' => 'Verifikasi Slip Gaji',
+            'payslip' => $payslip
+        ]);
+    }
+
+    public function exportExcel()
+    {
+        \Illuminate\Support\Facades\Gate::authorize('viewAny', Payslip::class);
+        return \Maatwebsite\Excel\Facades\Excel::download(new \App\Exports\PayslipsExport, 'data-slip-gaji.xlsx');
     }
 }

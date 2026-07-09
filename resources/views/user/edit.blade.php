@@ -10,9 +10,9 @@
 
             <div class="row g-3 mb-3">
                 <div class="col-md-3">
-                    <label for="avatar" class="form-label">Avatar</label>
-                    <input class="form-control @error('avatar') is-invalid  @enderror" type="file" id="upload"
-                        name="avatar">
+                    <label for="upload" class="form-label">Avatar</label>
+                    <input class="form-control @error('avatar') is-invalid  @enderror" type="file" id="upload" accept="image/*">
+                    <input type="hidden" name="avatar_base64" id="avatar_base64">
                     @error('avatar')
                         <div class="invalid-feedback">
                             {{ $message }}
@@ -98,5 +98,13 @@
         </form>
 
     </div>
+
+    @push('scripts')
+        <script>
+            $(document).ready(function() {
+                initCropper('upload', 'preview', 'avatar_base64', 1);
+            });
+        </script>
+    @endpush
 
 </x-app>

@@ -33,6 +33,7 @@
     <link rel="stylesheet" href="{{ asset('niceadmin/vendor/dataTables/css/dataTables.bootstrap5.css') }}">
     <link href="{{ asset('niceadmin/vendor/select2/css/select2.min.css') }}" rel="stylesheet" />
     <link href="{{ asset('niceadmin/vendor/select2/css/select2-bootstrap-5-theme.min.css') }}" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.css" rel="stylesheet">
 
     <!-- Template Main CSS File -->
     <link href="{{ asset('niceadmin/css/style.css') }}" rel="stylesheet">
@@ -203,6 +204,45 @@
         <nav class="header-nav ms-auto">
             <ul class="d-flex align-items-center">
 
+                <li class="nav-item dropdown">
+                    <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
+                        <i class="bi bi-bell"></i>
+                        @if(Auth::user()->unreadNotifications->count() > 0)
+                            <span class="badge bg-danger badge-number">{{ Auth::user()->unreadNotifications->count() }}</span>
+                        @endif
+                    </a>
+
+                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications">
+                        <li class="dropdown-header">
+                            Anda memiliki {{ Auth::user()->unreadNotifications->count() }} notifikasi baru
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+
+                        @forelse(Auth::user()->unreadNotifications->take(5) as $notification)
+                            <li class="notification-item p-2">
+                                <a href="{{ route('notifications.read', $notification->id) }}" class="text-decoration-none d-flex">
+                                    <i class="bi bi-exclamation-circle text-warning fs-3"></i>
+                                    <div class="ms-2">
+                                        <h6 class="text-dark mb-0 fw-bold">{{ $notification->data['title'] ?? 'Notifikasi' }}</h6>
+                                        <p class="text-muted small mb-0">{{ $notification->data['message'] ?? '' }}</p>
+                                        <p class="text-muted small mb-0">{{ $notification->created_at->diffForHumans() }}</p>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                        @empty
+                            <li class="dropdown-footer text-center p-3">
+                                Belum ada notifikasi
+                            </li>
+                        @endforelse
+
+                    </ul><!-- End Notification Dropdown Items -->
+                </li><!-- End Notification Nav -->
+
                 <li class="nav-item dropdown pe-3">
 
                     <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#"
@@ -231,6 +271,7 @@
                             <hr class="dropdown-divider">
                         </li>
 
+                        @if (in_array(strtolower(Auth::user()->role), ['superadmin', 'admin']))
                         <li>
                             <a class="dropdown-item d-flex align-items-center" href="{{ route('dashboard.edit') }}">
                                 <i class="bi bi-gear"></i>
@@ -240,6 +281,7 @@
                         <li>
                             <hr class="dropdown-divider">
                         </li>
+                        @endif
 
                         <li>
                             <hr class="dropdown-divider">
@@ -273,7 +315,7 @@
                     <span>Dashboard</span>
                 </a>
             </li>
-
+            @if (in_array(strtolower(Auth::user()->role), ['superadmin', 'admin']))
             <li class="nav-item">
                 <a class="nav-link {{ request()->routeIs('setting.*') ? '' : 'collapsed' }}"
                     href="{{ route('setting.index') }}">
@@ -281,6 +323,9 @@
                     <span>Setting</span>
                 </a>
             </li>
+            @endif
+
+
 
             @if (in_array(strtolower(Auth::user()->role), ['superadmin', 'admin', 'hr']))
                 <li class="nav-item">
@@ -373,6 +418,16 @@
                         <span>Slip Gaji</span>
                     </a>
                 </li>
+
+                @if (in_array(strtolower(Auth::user()->role), ['superadmin', 'admin']))
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('tax-configs.*') ? '' : 'collapsed' }}"
+                        href="{{ route('tax-configs.index') }}">
+                        <i class='bx bx-cog'></i>
+                        <span>Konfigurasi Pajak & BPJS</span>
+                    </a>
+                </li>
+                @endif
             @endif
 
 
@@ -448,12 +503,34 @@
         </div>
     </div>
 
+    {{-- modal cropper --}}
+    <div class="modal fade" id="cropperModal" tabindex="-1" aria-labelledby="cropperModalLabel" aria-hidden="true" data-bs-backdrop="static">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="cropperModalLabel">Potong Gambar</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="img-container">
+                        <img id="cropperImage" src="" alt="Picture" style="max-width: 100%;">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="button" class="btn btn-primary" id="btnCrop">Potong & Simpan</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- add on -->
     <script src="{{ asset('niceadmin/vendor/jquery/jquery-3.7.1.min.js') }}"></script>
     <script src="{{ asset('niceadmin/vendor/parsley/parsley.min.js') }}"></script>
     <script src="{{ asset('niceadmin/vendor/sweetalert2/sweetalert2@11') }}"></script>
     <script src="{{ asset('niceadmin/vendor/dataTables/js/dataTables.js') }}"></script>
     <script src="{{ asset('niceadmin/vendor/dataTables/js/dataTables.bootstrap5.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js"></script>
 
     <!-- Vendor JS Files -->
     <script src="{{ asset('niceadmin/vendor/apexcharts/apexcharts.min.js') }}"></script>
@@ -478,13 +555,71 @@
             trigger: 'change'
         });
 
-        $('#upload').on('change', function(event) {
-            $('#preview').attr('src', URL.createObjectURL(event.target.files[0]));
-        })
+        // Cropper Logic
+        let cropper;
+        let cropTargetPreview;
+        let cropTargetInput;
+        let cropAspectRatio = 1;
 
-        $('#upload-2').on('change', function(event) {
-            $('#preview-2').attr('src', URL.createObjectURL(event.target.files[0]));
-        })
+        function initCropper(fileInputId, previewId, base64InputId, aspectRatio = 1) {
+            $(`#${fileInputId}`).on('change', function(e) {
+                let files = e.target.files;
+                if (files && files.length > 0) {
+                    let file = files[0];
+                    // Validasi tipe file agar tidak error
+                    if(!file.type.match('image.*')) {
+                        Swal.fire('Error', 'Hanya format gambar yang diperbolehkan!', 'error');
+                        return;
+                    }
+                    cropTargetPreview = previewId;
+                    cropTargetInput = base64InputId;
+                    cropAspectRatio = aspectRatio;
+
+                    let reader = new FileReader();
+                    reader.onload = function(e) {
+                        $('#cropperImage').attr('src', e.target.result);
+                        $('#cropperModal').modal('show');
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+
+        $('#cropperModal').on('shown.bs.modal', function() {
+            let image = document.getElementById('cropperImage');
+            cropper = new Cropper(image, {
+                aspectRatio: cropAspectRatio,
+                viewMode: 1,
+            });
+        }).on('hidden.bs.modal', function() {
+            if (cropper) {
+                cropper.destroy();
+                cropper = null;
+            }
+        });
+
+        $('#btnCrop').click(function() {
+            if (!cropper) return;
+            // Dapatkan hasil potong
+            let canvas = cropper.getCroppedCanvas({
+                width: 500,
+                height: isNaN(cropAspectRatio) ? 500 : 500 * (1 / cropAspectRatio)
+            });
+            
+            canvas.toBlob(function(blob) {
+                let url = URL.createObjectURL(blob);
+                $(`#${cropTargetPreview}`).attr('src', url);
+                
+                let reader = new FileReader();
+                reader.readAsDataURL(blob); 
+                reader.onloadend = function() {
+                    let base64data = reader.result;
+                    $(`#${cropTargetInput}`).val(base64data);
+                }
+                
+                $('#cropperModal').modal('hide');
+            }, 'image/png');
+        });
 
         $('.select2-default').select2({
             theme: 'bootstrap-5',

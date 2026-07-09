@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 
 class UserController extends Controller
 {
@@ -14,6 +15,8 @@ class UserController extends Controller
      */
     public function index()
     {
+        Gate::authorize('viewAny', User::class);
+        
         return view('user.index', [
             'title' => 'User',
             'users' => User::latest()->get(),
@@ -25,6 +28,8 @@ class UserController extends Controller
      */
     public function create()
     {
+        Gate::authorize('create', User::class);
+        
         return view('user.create', [
             'title' => 'Create User',
         ]);
@@ -35,6 +40,7 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
+        Gate::authorize('create', User::class);
 
         $validate = $request->validate([
             'name' => 'required',
@@ -62,12 +68,21 @@ class UserController extends Controller
 
         try {
 
-            if ($request->file('avatar')) {
-                $validate['avatar'] = $request->file('avatar')->store('img', 'public');
+            if ($request->avatar_base64) {
+                // Decode base64 image
+                $image_parts = explode(";base64,", $request->avatar_base64);
+                if (count($image_parts) == 2) {
+                    $image_base64 = base64_decode($image_parts[1]);
+                    $file_name = 'img/' . uniqid() . '.png';
+                    
+                    Storage::disk('public')->put($file_name, $image_base64);
+                    $validate['avatar'] = $file_name;
+                }
             }
 
             $validate['password'] = bcrypt($request->password);
             $validate['email_verified_at'] = now();
+            unset($validate['passwordconfirm']);
             User::create($validate);
 
             DB::commit();
@@ -83,6 +98,8 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
+        Gate::authorize('view', $user);
+        
         return view('user.show', [
             'title' => 'Detail User',
             'user' => $user,
@@ -94,6 +111,8 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
+        Gate::authorize('update', $user);
+        
         return view('user.edit', [
             'title' => 'Edit User',
             'user' => $user,
@@ -105,6 +124,7 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
+        Gate::authorize('update', $user);
 
         $validate = $request->validate([
             'name' => 'required',
@@ -130,10 +150,19 @@ class UserController extends Controller
 
         try {
 
-            if ($request->file('avatar')) {
-                $validate['avatar'] = $request->file('avatar')->store('img', 'public');
-                if ($user->avatar && Storage::disk('public')->exists($user->avatar)) {
-                    Storage::disk('public')->delete($user->avatar);
+            if ($request->avatar_base64) {
+                // Decode base64 image
+                $image_parts = explode(";base64,", $request->avatar_base64);
+                if (count($image_parts) == 2) {
+                    $image_base64 = base64_decode($image_parts[1]);
+                    $file_name = 'img/' . uniqid() . '.png';
+                    
+                    Storage::disk('public')->put($file_name, $image_base64);
+                    $validate['avatar'] = $file_name;
+
+                    if ($user->avatar && Storage::disk('public')->exists($user->avatar)) {
+                        Storage::disk('public')->delete($user->avatar);
+                    }
                 }
             }
 
@@ -142,6 +171,7 @@ class UserController extends Controller
             } else {
                 unset($validate['password']);
             }
+            unset($validate['passwordconfirm']);
             $user->update($validate);
 
             DB::commit();
@@ -157,6 +187,8 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
+        Gate::authorize('delete', $user);
+        
         DB::beginTransaction();
 
         try {

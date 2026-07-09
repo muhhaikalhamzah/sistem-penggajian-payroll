@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\LeaveRequest;
+use App\Models\User;
+use App\Notifications\LeaveRequestedNotification;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Notification;
 
 class MyLeaveController extends Controller
 {
@@ -59,15 +62,23 @@ class MyLeaveController extends Controller
             return back()->with('error', 'Tanggal yang Anda ajukan beririsan (overlap) dengan pengajuan cuti Anda yang lain (Menunggu/Disetujui).')->withInput();
         }
 
-        LeaveRequest::create([
-            'employee_id' => $user->employee->id,
-            'start_date' => $validated['start_date'],
-            'end_date' => $validated['end_date'],
-            'leave_type' => $validated['leave_type'],
-            'status' => 'Menunggu',
-        ]);
+        try {
+            $leave = LeaveRequest::create([
+                'employee_id' => $user->employee->id,
+                'start_date' => $validated['start_date'],
+                'end_date' => $validated['end_date'],
+                'leave_type' => $validated['leave_type'],
+                'status' => 'Menunggu',
+            ]);
 
-        return redirect()->route('my-leaves.index')->with('success', 'Pengajuan cuti berhasil dibuat.');
+            // Ambil semua user dengan role Superadmin, Admin, atau hr (bisa case-insensitive tergantung data)
+            $notifyUsers = User::whereIn('role', ['Superadmin', 'Admin', 'hr', 'superadmin', 'admin'])->get();
+            Notification::send($notifyUsers, new LeaveRequestedNotification($leave));
+
+            return redirect()->route('my-leaves.index')->with('success', 'Pengajuan cuti berhasil dibuat.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Gagal mengajukan cuti: ' . $e->getMessage())->withInput();
+        }
     }
     
     public function show(LeaveRequest $my_leafe)

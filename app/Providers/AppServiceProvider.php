@@ -22,10 +22,12 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         try {
-            $setting = Setting::first();
-            View::share('setting', $setting);
-        } catch (\Exception $e) {
-            // database tidak ditemukan
+            if (\Illuminate\Support\Facades\Schema::hasTable('settings')) {
+                $setting = Setting::first();
+                View::share('setting', $setting);
+            }
+        } catch (\Throwable $e) {
+            // database/tabel belum siap
         }
     }
 }

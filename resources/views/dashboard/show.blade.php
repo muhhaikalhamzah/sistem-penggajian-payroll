@@ -51,9 +51,11 @@
             </div>
         </div>
 
+        @if(in_array(Auth::user()->role, ['Superadmin', 'Admin']))
         <div>
             <a href="{{ route('dashboard.edit') }}" class="btn btn-warning">Ubah Data</a>
         </div>
+        @endif
     </div>
 
     @push('modals')

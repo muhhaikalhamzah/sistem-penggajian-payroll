@@ -11,15 +11,38 @@ class DashboardController extends Controller
 {
     public function index()
     {
+        $user = Auth::user();
         $totalUsers = \App\Models\User::count();
         $superadminCount = \App\Models\User::where('role', 'Superadmin')->count();
         $adminCount = \App\Models\User::where('role', 'Admin')->count();
+
+        // Chart Data for Employee
+        $payslipChartData = null;
+        if (strtolower($user->role) === 'employee' && $user->employee) {
+            $payslips = \App\Models\Payslip::where('employee_id', $user->employee->id)
+                ->whereIn('status', ['approved', 'paid'])
+                ->orderBy('created_at', 'asc')
+                ->take(12)
+                ->get();
+                
+            if ($payslips->count() > 0) {
+                $payslipChartData = [
+                    'labels' => [],
+                    'data' => []
+                ];
+                foreach ($payslips as $payslip) {
+                    $payslipChartData['labels'][] = $payslip->period;
+                    $payslipChartData['data'][] = $payslip->net_salary;
+                }
+            }
+        }
 
         return view('dashboard.index', [
             'title' => 'Dashboard',
             'totalUsers' => $totalUsers,
             'superadminCount' => $superadminCount,
             'adminCount' => $adminCount,
+            'payslipChartData' => $payslipChartData ? json_encode($payslipChartData) : null
         ]);
     }
 
@@ -49,6 +72,7 @@ class DashboardController extends Controller
                 'name' => 'required',
                 'password' => 'nullable|min:8',
                 'passwordconfirm' => 'nullable|same:password',
+                'phone' => 'nullable|string|max:20',
                 'email' => 'required|email|lowercase|unique:users,email,' . $user->id,
                 'avatar' => 'nullable|image|mimes:png,jpg,jpeg,svg|max:512'
             ], [
@@ -63,10 +87,19 @@ class DashboardController extends Controller
                 'avatar.max' => 'Ukuran avatar tidak boleh lebih dari 512 KB',
             ]);
 
-            if ($request->file('avatar')) {
-                $validate['avatar'] = $request->file('avatar')->store('img', 'public');
-                if ($user->avatar && Storage::disk('public')->exists($user->avatar)) {
-                    Storage::disk('public')->delete($user->avatar);
+            if ($request->avatar_base64) {
+                // Decode base64 image
+                $image_parts = explode(";base64,", $request->avatar_base64);
+                if (count($image_parts) == 2) {
+                    $image_base64 = base64_decode($image_parts[1]);
+                    $file_name = 'img/' . uniqid() . '.png';
+                    
+                    Storage::disk('public')->put($file_name, $image_base64);
+                    $validate['avatar'] = $file_name;
+
+                    if ($user->avatar && Storage::disk('public')->exists($user->avatar)) {
+                        Storage::disk('public')->delete($user->avatar);
+                    }
                 }
             }
 
@@ -75,6 +108,7 @@ class DashboardController extends Controller
             } else {
                 unset($validate['password']);
             }
+            unset($validate['passwordconfirm']);
             $user->update($validate);
 
             DB::commit();
